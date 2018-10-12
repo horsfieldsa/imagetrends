@@ -1,0 +1,21 @@
+<a href="javascript:" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
+<% if Sneaker.where(approved: true).count == 0 %>
+  <div class="card text-white bg-danger">
+    <div class="card-body">
+      <p class="card-text">Nobody bothered to add any sneakers, you better fix this before you launch your site!</p>
+    </div>
+  </div>
+<% else %>
+  <div class="d-none d-xl-block d-lg-block d-md-block">
+    <h6>Most Popular Tags</h6>
+    <%= pie_chart Tag.group(:name).joins(:sneaker).where(:sneakers => {:approved => true}).count.sort_by{|k, v| v}.reverse %>
+  </div>
+
+  <div class="d-xl-none d-lg-none d-md-none text-center">
+    <div class="card text-white bg-secondary">
+      <div class="card-body">
+        <p class="card-text">Trends are not available on your device.</p>
+      </div>
+    </div>
+  </div>
+<% end %>

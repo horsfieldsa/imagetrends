@@ -1,0 +1,21 @@
+// Place all the styles related to the Sneakers controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+input[type="file"] {
+    display: none;
+}
+
+.hidden {
+  display: none;
+}
+
+.image_to_upload {
+  height: 75px;
+  width: 100px;
+}
+
+
+.fa-heart:hover {
+  color: red;
+}

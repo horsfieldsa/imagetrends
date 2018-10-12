@@ -1,0 +1,31 @@
+<%= link_to '<i class="fa fa-arrow-left" aria-hidden="true"></i>'.html_safe, :back, :class => "btn btn-outline-secondary" %>
+<hr/>
+<div class="row" id='sneaker'>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <center><%= social_share_button_tag("Check out this hot Sneaker on SNEAKERTRENDS!") %></center>
+    <figure class="figure">
+      <img class="img-fluid img-thumbnail" src="<%= @sneaker.image_url %>" alt="">
+    </figure>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <h4>Sneaker Details</h4>
+    <table class="table">
+      <tr>
+        <td>Uploaded On</td>
+        <td><%= @sneaker.created_at.strftime("%m/%d/%Y") %> <%= @sneaker.created_at.strftime("%I:%M%p") %></td>
+      </tr>
+      <tr>
+        <td>Tags</td>
+        <td>
+          <% if @sneaker.tags.count > 0 %>
+            <% @sneaker.tags.each do |tag| %>
+              <a href="/sneakers/tag/<%= tag.name %>" class="badge badge-secondary"><%= tag.name %></a>
+            <% end %>
+          <% else %>
+            <span class="badge badge-secondary">No Tags</span>
+          <% end %>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

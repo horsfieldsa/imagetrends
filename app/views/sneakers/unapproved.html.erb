@@ -1,0 +1,16 @@
+<a href="javascript:" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
+<center><span class="badge badge-danger">Unapproved</span></center>
+<br/>
+<% if Sneaker.where(approved: false).count == 0 %>
+  <div class="card text-white bg-danger">
+    <div class="card-body">
+      <p class="card-text">There are no unapproved sneakers!</p>
+    </div>
+  </div>
+<% else %>
+  <div class="row text-center text-lg-left" id='sneakers'>
+    <%= render @sneakers %>
+  </div>
+
+  <%= will_paginate @sneakers %>
+<% end %>
