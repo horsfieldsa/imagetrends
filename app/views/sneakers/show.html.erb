@@ -2,13 +2,12 @@
 <hr/>
 <div class="row" id='sneaker'>
   <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-    <center><%= social_share_button_tag("Check out this hot Sneaker on SNEAKERTRENDS!") %></center>
     <figure class="figure">
-      <img class="img-fluid img-thumbnail" src="<%= @sneaker.image_url %>" alt="">
+      <%= image_tag @sneaker.sneaker_image.variant(resize: "600x400"), :class => "img-fluid img-thumbnail" %>
     </figure>
   </div>
   <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-    <h4>Sneaker Details</h4>
+    <h4>Image Details</h4>
     <table class="table">
       <tr>
         <td>Uploaded On</td>
@@ -17,15 +16,42 @@
       <tr>
         <td>Tags</td>
         <td>
-          <% if @sneaker.tags.count > 0 %>
+           <% if @sneaker.tags.count > 0 %>
             <% @sneaker.tags.each do |tag| %>
-              <a href="/sneakers/tag/<%= tag.name %>" class="badge badge-secondary"><%= tag.name %></a>
+
+              <% if tag.name == "Error" %>
+                <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.source}", :class => "badge badge-danger" %>
+              <% else %>
+
+                <% if tag.source == "Rekognition - Detect Labels"%>
+                  <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-secondary" %>
+                <% end %>
+                <% if tag.source == "Rekognition - Detect Moderation Labels"%>
+                  <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-success" %>
+                <% end %>   
+                  <% if tag.source == "Rekognition - Detect Text"%>
+                  <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-warning" %>
+                <% end %>
+                <% if tag.source == "Rekognition - Recognize Celebrities"%>
+                  <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-info" %>
+                <% end %> 
+
+              <% end %>                                                            
             <% end %>
           <% else %>
             <span class="badge badge-secondary">No Tags</span>
           <% end %>
         </td>
       </tr>
+      <tr>
+        <td>Analyzed By</td>
+        <td>
+          <span class="badge badge-secondary">Rekognition - Detect Labels</span>
+          <span class="badge badge-success">Rekognition - Detect Moderation Labels</span>
+          <span class="badge badge-warning">Rekognition - Detect Text</span>
+          <span class="badge badge-info">Rekognition - Recognize Celebrities</span>
+        </td>
+      </tr>      
     </table>
   </div>
 </div>

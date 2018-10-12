@@ -15,11 +15,6 @@ class Sneaker < ApplicationRecord
     DetectModerationLabelsJob.perform_async(self.id)
     DetectTextJob.perform_async(self.id)
     DetectCelebritiesJob.perform_async(self.id)
-    # Under Development
-    # DetectExifDataJob.perform_async(self.id)
   end
 
-  def detect_brand
-    # Brand Detection To Go Here
-  end
 end

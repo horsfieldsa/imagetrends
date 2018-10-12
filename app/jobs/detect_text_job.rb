@@ -3,7 +3,7 @@ class DetectTextJob
   
     def perform(sneaker_id)
         begin
-            detection_logger.info("Attempting to detect text for image #{sneaker_id}")
+            detection_logger.info("Attempting to detect text for Image #{sneaker_id}")
             @sneaker = Sneaker.find(sneaker_id)
 
             client = Aws::Rekognition::Client.new
@@ -23,7 +23,7 @@ class DetectTextJob
                     @tag.sneaker = @sneaker
                     @tag.save
 
-                    detection_logger.info("Text detected for #{sneaker_id}: #{@tag.name}")
+                    detection_logger.info("Text detected in Image: #{sneaker_id} Text: #{@tag.name} Confidence: #{@tag.confidence}")
                 end
 
             end
@@ -32,9 +32,10 @@ class DetectTextJob
                 puts(e)
                 @tag = Tag.new
                 @tag.name = "Error"
+                @tag.source = "Rekognition - Detect Text"
                 @tag.sneaker = @sneaker
                 @tag.save
-                detection_logger.error("Error detecting text for image: #{sneaker_id} - #{e}")
+                detection_logger.error("Error detecting text for Image: #{sneaker_id} Details: #{e}")
         end
     end
 

@@ -83,7 +83,8 @@
        <% end %>
        <div class="d-none d-xl-block d-lg-block d-md-block">
          <ul class="nav top-nav nav-pills justify-content-center">
-           <li class="nav-item <%= 'active' if params[:controller] == 'sneakers' && params[:action] == 'index' && !request.query_string.present? %>">
+           <li class="nav-item <%= 'active' if params[:controller] == 'sneakers' && params[:action] == 'index' && !request.query_string.present? %>
+                               <%= 'active' if params[:controller] == 'sneakers' && params[:action] == 'show' && !request.query_string.present? %>">
              <a class="nav-link"
                 href="/"><i class="fa fa-clock-o" aria-hidden="true"></i> Recent</a>
            </li>

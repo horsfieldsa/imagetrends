@@ -1,7 +1,8 @@
 
 <div class="col-lg-3 col-md-3 col-xs-6">
   <figure class="figure">
-    <a href="#" data-toggle="modal" data-target="#modal-<%= sneaker.id %>">
+    <!-- <a href="#" data-toggle="modal" data-target="#modal-<%= sneaker.id %>"> -->
+    <a href="/sneakers/<%= sneaker.id %>">
       <%= image_tag sneaker.sneaker_image.variant(resize: "300x200"), :class => "img-fluid img-thumbnail" %>
     </a>
     <figcaption class="figure-caption text-center">

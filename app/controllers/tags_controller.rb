@@ -7,6 +7,7 @@ class TagsController < ApplicationController
   # GET /tags.json
   def index
     @tags_distinct = Tag.group(:name).joins(:sneaker).where(:sneakers => {:approved => true})
+    tag_logger.info("Loading a list of tags: #{@tags_distinct.count}")
   end
 
   private
@@ -18,4 +19,8 @@ class TagsController < ApplicationController
       params.require(:tag).permit(:sneaker_id, :name)
     end
     
+    def tag_logger
+      @@tag_logger ||= Logger.new("#{Rails.root}/log/application.log")
+    end
+
 end
