@@ -29,9 +29,11 @@
       <div class="modal-body">
         <div class="row" id='sneaker'>
           <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <center>
             <figure class="figure">
               <%= image_tag sneaker.sneaker_image.variant(resize: "600x400"), :class => "img-fluid img-thumbnail" %>
             </figure>
+          </center>
           </div>
           <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <table class="table text-center">
@@ -68,7 +70,6 @@
                   <span class="badge badge-success">Rekognition - Detect Moderation Labels</span>
                   <span class="badge badge-warning">Rekognition - Detect Text</span>
                   <span class="badge badge-info">Rekognition - Recognize Celebrities</span>
-                  <span class="badge badge-primary">SageMaker - Not Implemented</span>
                 </td>
               </tr>
             </table>

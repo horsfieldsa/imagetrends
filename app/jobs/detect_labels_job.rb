@@ -3,6 +3,7 @@ class DetectLabelsJob
   
     def perform(sneaker_id)
         begin
+            detection_logger.info("Attempting to detect labels for image #{sneaker_id}")
             @sneaker = Sneaker.find(sneaker_id)
 
             client = Aws::Rekognition::Client.new
@@ -22,10 +23,7 @@ class DetectLabelsJob
                 @tag.sneaker = @sneaker
                 @tag.save
 
-                if label.name == 'Footwear' && label.confidence > 75
-                    @sneaker.approved = true
-                    @sneaker.save
-                end
+                detection_logger.info("Label detected for #{sneaker_id}: #{@tag.name}")
 
             end
             rescue StandardError => e
@@ -35,7 +33,12 @@ class DetectLabelsJob
                 @tag.name = "Error"
                 @tag.sneaker = @sneaker
                 @tag.save
+                detection_logger.error("Error detecting labels for image: #{sneaker_id} - #{e}")
         end
+    end
+
+    def detection_logger
+        @@detection_logger ||= Logger.new("#{Rails.root}/log/application.log")
     end
 
 end

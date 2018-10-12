@@ -3,6 +3,7 @@ class DetectCelebritiesJob
   
     def perform(sneaker_id)
         begin
+            detection_logger.info("Attempting to detect celebrities for image #{sneaker_id}")
             @sneaker = Sneaker.find(sneaker_id)
 
             client = Aws::Rekognition::Client.new
@@ -28,7 +29,12 @@ class DetectCelebritiesJob
                 @tag.name = "Error"
                 @tag.sneaker = @sneaker
                 @tag.save
+                detection_logger.error("Error detecting celebrities for image: #{sneaker_id} - #{e}")
         end
+    end
+
+    def detection_logger
+        @@detection_logger ||= Logger.new("#{Rails.root}/log/application.log")
     end
 
 end

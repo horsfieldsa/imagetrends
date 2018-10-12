@@ -3,6 +3,7 @@ class DetectModerationLabelsJob
   
     def perform(sneaker_id)
         begin
+            detection_logger.info("Attempting to detect moderation labels for image #{sneaker_id}")
             @sneaker = Sneaker.find(sneaker_id)
 
             client = Aws::Rekognition::Client.new
@@ -24,7 +25,10 @@ class DetectModerationLabelsJob
                 if label.name == 'Suggestive' && label.confidence > 80
                     @sneaker.approved = false
                     @sneaker.save
+                    detection_logger.warn("Inappropriate content detected, unapproving image #{sneaker_id}: #{@tag.name}")
                 end
+
+                detection_logger.info("Modertail label detected for #{sneaker_id}: #{@tag.name}")
 
             end
             rescue StandardError => e
@@ -34,7 +38,12 @@ class DetectModerationLabelsJob
                 @tag.name = "Error"
                 @tag.sneaker = @sneaker
                 @tag.save
+                detection_logger.error("Error detecting moderation labels for image: #{sneaker_id} - #{e}")
         end
+    end
+
+    def detection_logger
+        @@detection_logger ||= Logger.new("#{Rails.root}/log/application.log")
     end
 
 end

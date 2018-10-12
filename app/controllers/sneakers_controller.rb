@@ -6,7 +6,9 @@ class SneakersController < ApplicationController
   # GET /sneakers
   # GET /sneakers.json
   def index
+    image_logger.info("Loading Images")
     if request.query_parameters['view'] == 'user'
+      image_logger.info("Returing images for user: #{current_user.username}")
       @sneakers = Sneaker.where(user: current_user).order(created_at: :desc).paginate(page: params[:page], per_page: 36)
       respond_to do |format|
       format.html
@@ -36,6 +38,7 @@ class SneakersController < ApplicationController
   end
 
   def find
+    image_logger.info("Getting images with tag: #{params[:name]}")
     @sneakers = Sneaker.joins(:tags).where(approved: true).where(tags: {name: params[:name]}).paginate(:page => params[:page])
     respond_to do |format|
      format.html
@@ -47,13 +50,16 @@ class SneakersController < ApplicationController
   # POST /sneakers.json
   def create
     @sneaker = current_user.sneakers.new(sneaker_params)
-    @sneaker.approved = false
+    @sneaker.approved = true
+    image_logger.info("User uploaded new image: #{current_user.username}")
 
     respond_to do |format|
       if @sneaker.save
+        image_logger.info("Successfully uploaded new image #{@sneaker.id}")
         format.html { redirect_to root_url, notice: 'Your sneaker was successfully uploaded.' }
         format.json { render :show, status: :created, location: @sneaker }
       else
+        image_logger.info("Error uploading new image #{@sneaker}")
         format.html { redirect_to root_url, alert: 'Unable to upload sneaker.' }
         format.json { render json: @sneaker, status: :unprocessable_entity }
       end
@@ -91,6 +97,10 @@ class SneakersController < ApplicationController
 
     def sneaker_params
       params.require(:sneaker).permit(:sneaker_image)
+    end
+
+    def image_logger
+      @@image_logger ||= Logger.new("#{Rails.root}/log/application.log")
     end
 
 end

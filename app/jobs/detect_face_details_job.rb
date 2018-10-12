@@ -3,6 +3,7 @@ class DetectFaceDetailsJob
   
     def perform(sneaker_id)
         begin
+            detection_logger.info("Attempting to detect face details for image #{sneaker_id}")
             @sneaker = Sneaker.find(sneaker_id)
 
             client = Aws::Rekognition::Client.new
@@ -18,6 +19,8 @@ class DetectFaceDetailsJob
                 @tag.sneaker = @sneaker
                 @tag.save
 
+                detection_logger.info("Face details detected for #{sneaker_id}: #{@tag.name}")
+
             end
             rescue StandardError => e
                 puts("--------------------------------- [ERROR] ---------------------------------")
@@ -26,7 +29,12 @@ class DetectFaceDetailsJob
                 @tag.name = "Error"
                 @tag.sneaker = @sneaker
                 @tag.save
+                detection_logger.error("Error detecting face details for image: #{sneaker_id} - #{e}")
         end
+    end
+
+    def detection_logger
+        @@detection_logger ||= Logger.new("#{Rails.root}/log/application.log")
     end
 
 end
