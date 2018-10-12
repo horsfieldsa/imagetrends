@@ -8,4 +8,4 @@ rails db:seed
 
 sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 3000
 export AWS_REGION=us-west-2
-rails s
+puma -C config/puma.rb
