@@ -48,4 +48,4 @@ Here's some useful information that will explain details that might not otherwis
 ## Docker Build (Local)
 * `docker build -t imagetrends:latest .`
 * `docker images`
-* `docker run --rm --label=imagetrends -it -p 8080:3000 imagetrends:latest`
+* `docker run --rm --label=imagetrends -it -p 3000:3000 imagetrends:latest`

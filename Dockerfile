@@ -9,6 +9,7 @@ WORKDIR /app
 
 ENV RAILS_SERVE_STATIC_FILES true
 ENV RAILS_LOG_TO_STDOUT true
+ENV AWS_REGION=us-west-2
 
 COPY Gemfile Gemfile.lock ./
 RUN bundle install --binstubs
