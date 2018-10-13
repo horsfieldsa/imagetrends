@@ -40,10 +40,38 @@ Mappings:
   AWSRegionArch2AMI:
     us-west-2:
       HVM64: ami-028e86d9bbafc033d
+
 Resources:
+
+  AccessRoleRekognitionReadOnly:
+    Type: "AWS::IAM::Role"
+    Properties:
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonRekognitionReadOnlyAccess
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Principal: 
+              Service: 
+                - "ec2.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+      Path: "/"
+
+  InstanceProfileRekognitionReadOnly: 
+    Type: "AWS::IAM::InstanceProfile"
+    Properties: 
+      Path: "/"
+      Roles: 
+        - 
+          Ref: "AccessRoleRekognitionReadOnly"
+
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
+      IamInstanceProfile: !Ref InstanceProfileRekognitionReadOnly
       InstanceType:
         Ref: InstanceType
       SecurityGroups:
