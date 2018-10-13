@@ -39,7 +39,7 @@ class SneakersController < ApplicationController
 
   # GET /sneakers/id
   def show
-    image_logger.info("Showing Details for Sneaker: #{@sneaker.id}")
+    image_logger.info("Showing Details for Image: #{@sneaker.id}")
   end
 
   def find
