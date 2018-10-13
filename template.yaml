@@ -1,13 +1,6 @@
-# http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/sample-templates-services-us-west-2.html#w1ab2c21c45c15c15
-# Amazon EC2 instance in a security group Creates an Amazon EC2 instance in an Amazon EC2 security group.
 ---
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'AWS CloudFormation Sample Template EC2InstanceWithSecurityGroupSample:
-  Create an Amazon EC2 instance running the Amazon Linux AMI. The AMI is chosen based
-  on the region in which the stack is run. This example creates an EC2 security group
-  for the instance to give you SSH access. **WARNING** This template creates an Amazon
-  EC2 instance. You will be billed for the AWS resources used if you create a stack
-  from this template.'
+Description: 'A CloudFormation template that will launch an EC2 instance running the ImageTrends Sample Application'
 Parameters:
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
@@ -45,12 +38,8 @@ Mappings:
     t2.large:
       Arch: HVM64
   AWSRegionArch2AMI:
-    us-east-1:
-      HVM64: ami-6869aa05
     us-west-2:
-      HVM64: ami-7172b611
-    us-west-1:
-      HVM64: ami-31490d51
+      HVM64: ami-028e86d9bbafc033d
 Resources:
   EC2Instance:
     Type: AWS::EC2::Instance
@@ -69,6 +58,12 @@ Resources:
           - AWSInstanceType2Arch
           - Ref: InstanceType
           - Arch
+      UserData: !Base64 |
+            #!/bin/bash -xe
+            service docker start
+            REGION=`curl http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
+            iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 3000
+            docker run -d --rm --label=imagetrends -it -v /opt/imagetrends-logs:/app/log -e "AWS_REGION=${REGION}" --network=host imagetrends:latest
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -79,6 +74,11 @@ Resources:
         ToPort: '22'
         CidrIp:
           Ref: SSHLocation
+      - IpProtocol: tcp
+        FromPort: '80'
+        ToPort: '80'
+        CidrIp:
+          Ref: SSHLocation          
 Outputs:
   InstanceId:
     Description: InstanceId of the newly created EC2 instance
