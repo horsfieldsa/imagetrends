@@ -7,7 +7,6 @@
   </div>
 <% else %>
   <div class="text-center">
-    <a href="/unapproved" class="badge badge-danger">Unapproved</a>
     <% @tags_distinct.each do |tag| %>
       <a href="/sneakers/tag/<%= tag.name %>" class="badge badge-secondary"><%= tag.name %></a>
     <% end %>
