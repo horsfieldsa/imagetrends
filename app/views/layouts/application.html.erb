@@ -29,7 +29,7 @@
 
   <body>
     <nav class="navbar navbar-light navbar-expand-md fixed-top" style="background-color: #ffffff;">
-      <%= link_to "<span>#{image_tag("logo.png", height: 60, border: 0)}</span>".html_safe, root_path, class: "navbar-brand" %>
+      <%= link_to "<span>#{image_tag("logo.png", height: 45, border: 0)}</span>".html_safe, root_path, class: "navbar-brand" %>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -44,7 +44,7 @@
                     :class => "btn btn-primary my-2 my-sm-0" %>
                 </li>
               <% else %>
-                <li class="nav-item"><%= link_to '<i class="fa fa-camera-retro" aria-hidden="true"></i> Share'.html_safe, new_user_session_path,
+                <li class="nav-item"><%= link_to '<i class="fa fa-camera-retro" aria-hidden="true"></i> Upload'.html_safe, new_user_session_path,
                     :class => "btn btn-outline-dark my-2 my-sm-0",'data-toggle' => 'modal', 'data-target' => '#uploadModal' %>
                 &nbsp;     
                 <li class="nav-item dropdown">
@@ -168,13 +168,13 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="uploadModalLabel">Share Sneaker</h5>
+            <h5 class="modal-title" id="uploadModalLabel">Upload Image</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <!-- Put Upload Form Here -->
-          <%= form_for @sneaker do |f| %>
+          <%= form_for @new_sneaker do |f| %>
             <div class="modal-body text-center">
                 <%= image_tag("upload.png", height: 50, width: 10, border: 0, :class => "image_to_upload img-thumbnail") %>
                 <label class="custom-file-upload btn btn-outline-dark">
@@ -198,7 +198,7 @@
 
     <footer class="footer">
       <div class="container">
-        <span class="text-muted">Created in Oregon and Hosted in the Cloud</span>
+        <span class="text-muted">Created in Oregon and Hosted on AWS</span>
       </div>
     </footer>
 

@@ -40,7 +40,7 @@ Mappings:
       Arch: HVM64
   AWSRegionArch2AMI:
     us-west-2:
-      HVM64: ami-028e86d9bbafc033d
+      HVM64: ami-0d1000aff9a9bad89 # AL Base AMI
 
 Resources:
 
@@ -89,8 +89,15 @@ Resources:
           - Arch
       UserData: !Base64 |
             #!/bin/bash -xe
+            yum update -y
+            yum install -y git
+            amazon-linux-extras install -y docker
             service docker start
+            git clone https://github.com/horsfieldsa/imagetrends.git /opt/imagetrends
+            cd /opt/imagetrends
+            docker build -t imagetrends:latest .
             REGION=`curl http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
+            echo $REGION
             iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 3000
             docker run -d --label=imagetrends -it -v /opt/imagetrends-logs:/app/log -e "AWS_REGION=${REGION}" --network=host --restart=unless-stopped imagetrends:latest
   

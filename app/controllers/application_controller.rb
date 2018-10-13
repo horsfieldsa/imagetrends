@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   private
 
   def create_sneaker
-    @sneaker = Sneaker.new
+    @new_sneaker = Sneaker.new
   end
 
   def log_action
