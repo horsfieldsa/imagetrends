@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to main_app.root_url, :alert => exception.message
-    application_logger.info("Access Denied - Action: #{params[:action]} - Controller: #{params[:controller]} - Event: #{exception.message}")
+    application_logger.warn("Access Denied - Action: #{params[:action]} - Controller: #{params[:controller]} - Event: #{exception.message}")
   end
 
   private

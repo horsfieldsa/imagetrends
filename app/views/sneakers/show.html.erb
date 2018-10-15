@@ -1,4 +1,9 @@
 <%= link_to '<i class="fa fa-arrow-left" aria-hidden="true"></i>'.html_safe, :back, :class => "btn btn-outline-secondary" %>
+<% if current_user %>
+  <% if @sneaker.user.id == current_user.id %>
+    <%= link_to 'Delete', sneaker_path(@sneaker), data: {:confirm => 'Are you sure?'}, :method => :delete, :class => "btn btn-outline-danger pull-right" %>
+  <% end %>
+<% end %>
 <hr/>
 <div class="row" id='sneaker'>
   <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">

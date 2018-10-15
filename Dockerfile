@@ -18,4 +18,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD rails db:create ; rails db:migrate ; puma -C config/puma.rb
+CMD rails db:create ; rails db:migrate ; rails db:seed ; puma -C config/puma.rb
