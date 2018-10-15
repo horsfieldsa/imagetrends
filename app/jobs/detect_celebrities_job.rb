@@ -11,6 +11,10 @@ class DetectCelebritiesJob
                     image: { bytes: @sneaker.sneaker_image.download }
             })
 
+            if resp.celebrity_faces.count == 0 
+                detection_logger.info("No celebrieties detected for Image: #{sneaker_id}")
+            end
+
             resp.celebrity_faces.each do |label|
                 puts "#{label.name}-#{label.match_confidence.to_i}"
 

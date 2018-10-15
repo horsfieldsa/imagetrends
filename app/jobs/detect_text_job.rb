@@ -11,6 +11,10 @@ class DetectTextJob
                     image: { bytes: @sneaker.sneaker_image.download }
             })
 
+            if resp.text_detections.count == 0 
+                detection_logger.info("No text detected for Image: #{sneaker_id}")
+            end              
+
             resp.text_detections.each do |label|
 
                 puts "#{label.detected_text}-#{label.confidence.to_i}"

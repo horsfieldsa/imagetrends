@@ -61,7 +61,7 @@ class SneakersController < ApplicationController
     respond_to do |format|
       if @sneaker.save
         image_logger.info("Successfully created new image #{@sneaker.id}")
-        format.html { redirect_to root_url, notice: 'Your image was successfully uploaded.' }
+        format.html { redirect_to @sneaker, notice: 'Your image was successfully uploaded.' }
         format.json { render :show, status: :created, location: @sneaker }
       else
         image_logger.error("Error creating new image #{@sneaker}")

@@ -12,6 +12,10 @@ class DetectModerationLabelsJob
                     min_confidence: 75,
             })
 
+            if resp.moderation_labels.count == 0 
+                detection_logger.info("No moderation labels detected for Image: #{sneaker_id}")
+            end           
+
             resp.moderation_labels.each do |label|
                 puts "#{label.name}-#{label.confidence.to_i}"
 

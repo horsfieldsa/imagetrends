@@ -13,6 +13,10 @@ class DetectLabelsJob
                     min_confidence: 50,
             })
 
+            if resp.labels.count == 0 
+                detection_logger.info("No labels detected for Image: #{sneaker_id}")
+            end
+
             resp.labels.each do |label|
                 puts "#{label.name}-#{label.confidence.to_i}"
 
