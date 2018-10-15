@@ -184,12 +184,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <!--
-              <%= f.submit "Share", :class => "btn btn-primary", :disabled => true, :onclick => "processUpload(this)" %>
-              -->
-
-              <%= f.button "Share".html_safe, :class => "btn btn-primary", type: :submit, :disabled => true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Uploading ..."} %>         
-
+              <%= f.button "Share".html_safe, :class => "btn btn-primary", type: :submit, :disabled => true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Uploading ..."} %>
             </div>
          <% end %>
         </div>

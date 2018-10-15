@@ -1,5 +1,4 @@
 class Sneaker < ApplicationRecord
-  has_many :likes, dependent: :delete_all
   has_many :tags, dependent: :delete_all
   has_one_attached :sneaker_image
   belongs_to :user

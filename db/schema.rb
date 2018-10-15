@@ -33,12 +33,6 @@ ActiveRecord::Schema.define(version: 2018_07_31_215701) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "likes", force: :cascade do |t|
-    t.integer "sneaker_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
 # Could not dump table "sneakers" because of following StandardError
 #   Unknown type 'bool' for column 'approved'
 
