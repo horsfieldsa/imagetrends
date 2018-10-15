@@ -32,8 +32,30 @@ The CloudFormation template will output several items which will be useful for a
 3. Availability Zone
 4. Sample Application Public DNS
 
-[Add Link to CloudFormation Deployment]
+You can launch the sample application stack through this button:
+
+WARNING: Make sure you deploy it to a supported region (See Below)
+
+[![Launch Stack](https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=buildkite&templateURL=https://s3-us-west-2.amazonaws.com/imagetrends-sample-application/template.yaml)
 
 ## Limitations
 
-Only us-west-2 supported at this time.
+### Supported Regions
+
+* us-west-2 (Oregon)
+
+### Planned Regions
+
+* us-east-1 (Northern Virginia)
+* us-east-2 (Ohio)
+* eu-west-1 (Ireland)
+* ap-northeast-1 (Tokyo)
+* ap-southeast-2 (Sydney)
+
+## Sample Photos
+
+You can download some sample photos to use with the application here: 	https://s3-us-west-2.amazonaws.com/imagetrends-sample-application/sample-photos.zip
+
+These images are covered by the Death to Stock Photo licensing terms outlined here: https://deathtothestockphoto.com/official-license/
+
+
