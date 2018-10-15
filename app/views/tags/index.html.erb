@@ -7,8 +7,28 @@
   </div>
 <% else %>
   <div class="text-center">
+  <h6>All Tags</h6>
     <% @tags_distinct.each do |tag| %>
-      <a href="/sneakers/tag/<%= tag.name %>" class="badge badge-secondary"><%= tag.name %></a>
+        <% if tag.source == "Rekognition - Detect Labels"%>
+          <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-secondary" %>
+        <% end %>
+        <% if tag.source == "Rekognition - Detect Moderation Labels"%>
+          <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-success" %>
+        <% end %>   
+          <% if tag.source == "Rekognition - Detect Text"%>
+          <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-warning" %>
+        <% end %>
+        <% if tag.source == "Rekognition - Recognize Celebrities"%>
+          <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-info" %>
+        <% end %> 
     <% end %>
+  </div>
+  <div class="text-center">
+  <hr/>
+  <h6>Tag Created By</h6>
+      <span class="badge badge-secondary">Rekognition - Detect Labels</span>
+      <span class="badge badge-success">Rekognition - Detect Moderation Labels</span>
+      <span class="badge badge-warning">Rekognition - Detect Text</span>
+      <span class="badge badge-info">Rekognition - Recognize Celebrities</span>
   </div>
 <% end %>

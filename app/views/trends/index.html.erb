@@ -8,8 +8,13 @@
 <% else %>
   <div class="d-none d-xl-block d-lg-block d-md-block">
     <h6>Most Popular Tags</h6>
-    <%= pie_chart Tag.group(:name).joins(:sneaker).where(:sneakers => {:approved => true}).count.sort_by{|k, v| v}.reverse %>
+    <%= pie_chart Tag.group(:name).joins(:sneaker).where(:sneakers => {:approved => true}).limit(10).count.sort_by{|k, v| v}.reverse %>
   </div>
+
+  <div class="d-none d-xl-block d-lg-block d-md-block">
+    <h6>Most Active Users</h6>
+    <%= bar_chart User.group(:username).joins(:sneakers).limit(10).count.sort_by{|k, v| v}.reverse %>
+  </div>  
 
   <div class="d-xl-none d-lg-none d-md-none text-center">
     <div class="card text-white bg-secondary">
