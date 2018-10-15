@@ -63,6 +63,9 @@
         </td>
       </tr>      
     </table>
+    <!--
+    <%= link_to '<i class="fa fa-heart"></i>'.html_safe, '#', :class => "btn btn-outline-secondary pull-left" %>
+    -->
     <%= link_to '<i class="fa fa-download"></i> Download'.html_safe, rails_blob_path(@sneaker.sneaker_image, disposition: "attachment"), :class => "btn btn-outline-secondary pull-right" %>
   </div>
 </div>
