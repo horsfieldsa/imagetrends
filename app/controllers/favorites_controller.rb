@@ -8,7 +8,7 @@ class FavoritesController < ApplicationController
 
     respond_to do |format|
       if @favorite.save
-        format.html { redirect_to @favorite.sneaker, notice: 'This image has been marked as a favorite.' }
+        format.html { redirect_to @favorite.sneaker}
         format.json { render :show, status: :created, location: @favorite }
       else
         format.html { redirect_to @favorite.sneaker, notice: 'Unable to mark image as a favorite.' }
@@ -23,7 +23,7 @@ class FavoritesController < ApplicationController
     @sneaker = @favorite.sneaker
     @favorite.destroy
     respond_to do |format|
-      format.html { redirect_to @sneaker, notice: 'This image has been removed as a favorite' }
+      format.html { redirect_to @sneaker }
       format.json { head :no_content }
     end
   end

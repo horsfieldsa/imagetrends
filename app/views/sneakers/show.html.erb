@@ -26,7 +26,7 @@
           <%= f.button "<i class='fa fa-heart'></i> #{!@sneaker.favorites.nil? ? @sneaker.favorites.count : "0" }".html_safe, type: :submit, :class => "btn btn-outline-secondary pull-right" %>
       <% end %>
     <% else %>
-      <%= link_to "<i class='fa fa-heart'> #{@sneaker.favorites.count}</i>".html_safe, favorite_path(@favorite), :method => :delete, :class => "btn btn-outline-secondary pull-right", :style => "color: red;" %>
+      <%= link_to "<i class='fa fa-heart'> #{@sneaker.favorites.count}</i>".html_safe, favorite_path(@favorite), :method => :delete, :class => "btn btn-outline-light pull-right", :style => "color: red;" %>
     <% end %>
   </div>
   <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">

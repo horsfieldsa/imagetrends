@@ -6,6 +6,14 @@
     </div>
   </div>
 <% else %>
+
+  <div class="d-none d-xl-block d-lg-block d-md-block">
+    <h6>Most Liked Images</h6>
+    <div class="row text-center text-lg-left" id='sneakers'>
+      <%= render @top_sneakers %>
+    </div>
+  </div>
+
   <div class="d-none d-xl-block d-lg-block d-md-block">
     <h6>Most Popular Tags</h6>
     <%= pie_chart Tag.group(:name).joins(:sneaker).where(:sneakers => {:approved => true}).limit(10).count.sort_by{|k, v| v}.reverse %>
