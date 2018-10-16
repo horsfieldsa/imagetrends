@@ -15,6 +15,7 @@ class Sneaker < ApplicationRecord
     DetectModerationLabelsJob.perform_async(self.id)
     DetectTextJob.perform_async(self.id)
     DetectCelebritiesJob.perform_async(self.id)
+    DetectExifDataJob.perform_async(self.id)
   end
 
 end

@@ -58,7 +58,9 @@
                 <% if tag.source == "Rekognition - Recognize Celebrities"%>
                   <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-info" %>
                 <% end %> 
-
+                <% if tag.source == "Extract EXIF Data"%>
+                  <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name}", :class => "badge badge-dark" %>
+                <% end %> 
               <% end %>                                                            
             <% end %>
           <% else %>
@@ -73,6 +75,7 @@
           <span class="badge badge-success">Rekognition - Detect Moderation Labels</span>
           <span class="badge badge-warning">Rekognition - Detect Text</span>
           <span class="badge badge-info">Rekognition - Recognize Celebrities</span>
+          <span class="badge badge-dark">Extract EXIF Data</span>
         </td>
       </tr>   
       <tr>
