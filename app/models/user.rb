@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :sneakers, dependent: :delete_all
+  has_many :favorites, dependent: :delete_all
 
   validates :username, presence: true
   validates_uniqueness_of :email, :username

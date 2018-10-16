@@ -1,8 +1,11 @@
 <%= link_to '<i class="fa fa-arrow-left" aria-hidden="true"></i>'.html_safe, :back, :class => "btn btn-outline-secondary" %>
+<%= link_to '<i class="fa fa-download"></i> Download'.html_safe, rails_blob_path(@sneaker.sneaker_image, disposition: "attachment"),
+             :class => "btn btn-outline-secondary pull-right ml-2" %>
 <% if current_user %>
   <% if @sneaker.user.id == current_user.id %>
     <%= link_to '<i class="fa fa-trash"></i> Delete'.html_safe, sneaker_path(@sneaker), data: {:confirm => 'Are you sure?'}, :method => :delete, :class => "btn btn-outline-danger pull-right" %>
   <% end %>
+  
 <% end %>
 <hr/>
 <% if @sneaker.approved == 0 %>
@@ -15,9 +18,19 @@
     <figure class="figure">
       <%= image_tag @sneaker.sneaker_image.variant(resize: "600x400"), :class => "img-fluid img-thumbnail" %>
     </figure>
+        
+    <% if @favorited == false %>
+      <%= form_for Favorite.new do |f| %>
+          <%= f.hidden_field :sneaker_id, value: @sneaker.id %>
+          <%= f.hidden_field :user_id, value: current_user.id %></td>
+          <%= f.button "<i class='fa fa-heart'></i> #{!@sneaker.favorites.nil? ? @sneaker.favorites.count : "0" }".html_safe, type: :submit, :class => "btn btn-outline-secondary pull-right" %>
+      <% end %>
+    <% else %>
+      <%= link_to "<i class='fa fa-heart'> #{@sneaker.favorites.count}</i>".html_safe, favorite_path(@favorite), :method => :delete, :class => "btn btn-outline-secondary pull-right", :style => "color: red;" %>
+    <% end %>
   </div>
   <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-    <h4>Image Details</h4>
+    <h5>Image Details</h5>
     <table class="table">
       <tr>
         <td>Uploaded On</td>
@@ -61,11 +74,19 @@
           <span class="badge badge-warning">Rekognition - Detect Text</span>
           <span class="badge badge-info">Rekognition - Recognize Celebrities</span>
         </td>
-      </tr>      
+      </tr>   
+      <tr>
+        <td>Favorited By</td>
+        <td>
+          <% if @sneaker.favorites.count == 0 %>
+            <span class="badge badge-secondary"> Nobody </span>
+          <% else %>
+            <% @sneaker.favorites.each do |favorite| %>
+            <span class="badge badge-secondary"> <%= favorite.user.username %> </span>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>   
     </table>
-    <!--
-    <%= link_to '<i class="fa fa-heart"></i>'.html_safe, '#', :class => "btn btn-outline-secondary pull-left" %>
-    -->
-    <%= link_to '<i class="fa fa-download"></i> Download'.html_safe, rails_blob_path(@sneaker.sneaker_image, disposition: "attachment"), :class => "btn btn-outline-secondary pull-right" %>
   </div>
 </div>

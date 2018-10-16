@@ -2,6 +2,7 @@ class Sneaker < ApplicationRecord
   has_many :tags, dependent: :delete_all
   has_one_attached :sneaker_image
   belongs_to :user
+  has_many :favorites
 
   after_create_commit :detect_labels
 

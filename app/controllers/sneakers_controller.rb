@@ -11,6 +11,18 @@ class SneakersController < ApplicationController
         image_logger.info("Loading user images for user: #{current_user.id} Page: #{params[:page]}")
       end
       @sneakers = Sneaker.where(user: current_user).order(created_at: :desc).paginate(page: params[:page], per_page: 36)
+
+      respond_to do |format|
+      format.html
+      format.js
+      end
+    elsif request.query_parameters['view'] == 'favorites'
+      if current_user
+        image_logger.info("Loading favorite images for user: #{current_user.id} Page: #{params[:page]}")
+      end
+
+      @sneakers = Sneaker.where(user: current_user).order(created_at: :desc).paginate(page: params[:page], per_page: 36)
+            
       respond_to do |format|
       format.html
       format.js
@@ -19,6 +31,7 @@ class SneakersController < ApplicationController
       if current_user
         image_logger.info("Loading all images for user: #{current_user.id} Page: #{params[:page]}")
       end
+
       @sneakers = Sneaker.where(approved: true).order(created_at: :desc).paginate(page: params[:page], per_page: 36)
       respond_to do |format|
       format.html
@@ -39,6 +52,14 @@ class SneakersController < ApplicationController
 
   # GET /sneakers/id
   def show
+
+    if Favorite.where("user_id = ? AND sneaker_id = ?", current_user.id, @sneaker.id).count > 0
+      @favorited = true
+      @favorite = Favorite.find_by_user_id_and_sneaker_id(current_user.id, @sneaker.id)
+    else
+      @favorited = false
+    end
+
     image_logger.info("Showing Details for Image: #{@sneaker.id}")
   end
 
