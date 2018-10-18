@@ -1,8 +1,12 @@
 class DetectLabelsJob
     include SuckerPunch::Job
+    require 'aws-xray-sdk'
   
     def perform(sneaker_id)
         begin
+
+            segment = XRay.recorder.begin_segment 'imagetrends'
+
             detection_logger.info("Attempting to detect labels for Image #{sneaker_id}")
             @sneaker = Sneaker.find(sneaker_id)
 
@@ -39,6 +43,8 @@ class DetectLabelsJob
                 @tag.sneaker = @sneaker
                 @tag.save
                 detection_logger.error("Error detecting labels for Image: #{sneaker_id} Details: #{e}")
+
+            XRay.recorder.end_segment
         end
     end
 

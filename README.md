@@ -57,5 +57,3 @@ WARNING: Make sure you deploy it to a supported region (See Below)
 You can download some sample photos to use with the application here: 	https://s3-us-west-2.amazonaws.com/imagetrends-sample-application/sample-photos.zip
 
 These images are covered by the Death to Stock Photo licensing terms outlined here: https://deathtothestockphoto.com/official-license/
-
-
