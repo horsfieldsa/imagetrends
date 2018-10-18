@@ -16,6 +16,10 @@ RUN bundle install --binstubs
 
 COPY . .
 
+COPY docker-entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 3000
 
-CMD rails db:create ; rails db:migrate ; rails db:seed ; puma -C config/puma.rb
+ENTRYPOINT ["/entrypoint.sh"]
+CMD puma -C config/puma.rb
