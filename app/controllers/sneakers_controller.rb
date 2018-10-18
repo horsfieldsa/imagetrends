@@ -10,7 +10,7 @@ class SneakersController < ApplicationController
       if current_user
         image_logger.info("Loading user images for user: #{current_user.id} Page: #{params[:page]}")
       end
-      @sneakers = Sneaker.where(user: current_user).order(created_at: :desc).paginate(page: params[:page], per_page: 36)
+      @sneakers = Sneaker.where(user: current_user).order(created_at: :desc).paginate(page: params[:page])
 
       respond_to do |format|
       format.html
@@ -21,7 +21,7 @@ class SneakersController < ApplicationController
         image_logger.info("Loading favorite images for user: #{current_user.id} Page: #{params[:page]}")
       end
 
-      @sneakers = Sneaker.where(user: current_user).order(created_at: :desc).paginate(page: params[:page], per_page: 36)
+      @sneakers = Sneaker.where(user: current_user).order(created_at: :desc).paginate(page: params[:page])
             
       respond_to do |format|
       format.html
@@ -32,7 +32,7 @@ class SneakersController < ApplicationController
         image_logger.info("Loading all images for user: #{current_user.id} Page: #{params[:page]}")
       end
 
-      @sneakers = Sneaker.where(approved: true).order(created_at: :desc).paginate(page: params[:page], per_page: 36)
+      @sneakers = Sneaker.where(approved: true).order(created_at: :desc).paginate(page: params[:page])
       respond_to do |format|
       format.html
       format.js
@@ -43,7 +43,7 @@ class SneakersController < ApplicationController
   # GET /unapproved
   # GET /unapproved.json
   def unapproved
-    @sneakers = Sneaker.where(approved: false).order(created_at: :desc).paginate(page: params[:page], per_page: 36)
+    @sneakers = Sneaker.where(approved: false).order(created_at: :desc).paginate(page: params[:page])
     respond_to do |format|
      format.html
      format.js

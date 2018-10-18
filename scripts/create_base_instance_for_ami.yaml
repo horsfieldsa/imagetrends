@@ -49,6 +49,7 @@ Resources:
     Properties:
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/AmazonRekognitionReadOnlyAccess
+        - arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess
       AssumeRolePolicyDocument: 
         Version: "2012-10-17"
         Statement: 
@@ -91,6 +92,8 @@ Resources:
             #!/bin/bash -xe
             yum update -y
             yum install -y git
+            curl https://s3.dualstack.us-east-2.amazonaws.com/aws-xray-assets.us-east-2/xray-daemon/aws-xray-daemon-3.x.rpm -o /home/ec2-user/xray.rpm
+            yum install -y /home/ec2-user/xray.rpm
             amazon-linux-extras install -y docker
             service docker start
             git clone https://github.com/horsfieldsa/imagetrends.git /opt/imagetrends

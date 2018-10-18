@@ -30,6 +30,7 @@ gem 'devise'
 gem 'sucker_punch', '~> 2.0'
 gem 'cancancan', '~> 2.0'
 gem 'exifr'
+gem 'aws-xray-sdk', require: ['aws-xray-sdk/facets/rails/railtie']
 
 group :development, :test do
   gem 'byebug', platform: :mri

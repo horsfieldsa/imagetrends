@@ -7,7 +7,7 @@ class Sneaker < ApplicationRecord
   after_create_commit :detect_labels
 
   # Pagination Items Per Page
-  self.per_page = 36
+  self.per_page = 20
   
   private
   def detect_labels
@@ -16,6 +16,7 @@ class Sneaker < ApplicationRecord
     DetectTextJob.perform_async(self.id)
     DetectCelebritiesJob.perform_async(self.id)
     DetectExifDataJob.perform_async(self.id)
+    #DetectFaceDetailsJob.perform_async(self.id)
   end
 
 end
