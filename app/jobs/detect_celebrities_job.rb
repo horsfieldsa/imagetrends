@@ -13,7 +13,7 @@ class DetectCelebritiesJob
             XRay.recorder.configure(config)
 
             segment = XRay.recorder.begin_segment 'imagetrends'
-            XRay.recorder.capture('detect_labels', segment: segment) do |subsegment|
+            XRay.recorder.capture('detect_celebrities', segment: segment) do |subsegment|
 
                 client = Aws::Rekognition::Client.new
                 resp = client.recognize_celebrities({
