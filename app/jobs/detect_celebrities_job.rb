@@ -6,28 +6,42 @@ class DetectCelebritiesJob
             detection_logger.info("Attempting to detect celebrities for Image #{sneaker_id}")
             @sneaker = Sneaker.find(sneaker_id)
 
-            client = Aws::Rekognition::Client.new
-            resp = client.recognize_celebrities({
-                    image: { bytes: @sneaker.sneaker_image.download }
-            })
+            config = {
+                logger: xray_logger
+              }
+              
+            XRay.recorder.configure(config)
 
-            if resp.celebrity_faces.count == 0 
-                detection_logger.info("No celebrieties detected for Image: #{sneaker_id}")
+            segment = XRay.recorder.begin_segment 'imagetrends'
+            XRay.recorder.capture('detect_labels', segment: segment) do |subsegment|
+
+                client = Aws::Rekognition::Client.new
+                resp = client.recognize_celebrities({
+                        image: { bytes: @sneaker.sneaker_image.download }
+                })
+
+                if resp.celebrity_faces.count == 0 
+                    detection_logger.info("No celebrieties detected for Image: #{sneaker_id}")
+                end
+
+                resp.celebrity_faces.each do |label|
+                    puts "#{label.name}-#{label.match_confidence.to_i}"
+
+                    @tag = Tag.new
+                    @tag.name = label.name
+                    @tag.confidence = label.match_confidence
+                    @tag.source = "Rekognition - Recognize Celebrities"
+                    @tag.sneaker = @sneaker
+                    @tag.save
+
+                    detection_logger.info("Celebrity detected for Image: #{sneaker_id} Name: #{@tag.name} Confidence: #{@tag.confidence}")
+
+                end
+
             end
 
-            resp.celebrity_faces.each do |label|
-                puts "#{label.name}-#{label.match_confidence.to_i}"
+            XRay.recorder.end_segment
 
-                @tag = Tag.new
-                @tag.name = label.name
-                @tag.confidence = label.match_confidence
-                @tag.source = "Rekognition - Recognize Celebrities"
-                @tag.sneaker = @sneaker
-                @tag.save
-
-                detection_logger.info("Celebrity detected for Image: #{sneaker_id} Name: #{@tag.name} Confidence: #{@tag.confidence}")
-
-            end
             rescue StandardError => e
                 puts("--------------------------------- [ERROR] ---------------------------------")
                 puts(e)
@@ -42,6 +56,10 @@ class DetectCelebritiesJob
 
     def detection_logger
         @@detection_logger ||= Logger.new("#{Rails.root}/log/application.log")
+    end
+
+    def xray_logger
+        @@xray_logger ||= Logger.new("#{Rails.root}/log/xray.log")
     end
 
 end

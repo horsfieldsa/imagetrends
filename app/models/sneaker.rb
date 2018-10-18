@@ -1,4 +1,6 @@
 class Sneaker < ApplicationRecord
+  require 'aws-xray-sdk'
+
   has_many :tags, dependent: :delete_all
   has_one_attached :sneaker_image
   belongs_to :user

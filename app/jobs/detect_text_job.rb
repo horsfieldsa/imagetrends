@@ -6,31 +6,45 @@ class DetectTextJob
             detection_logger.info("Attempting to detect text for Image #{sneaker_id}")
             @sneaker = Sneaker.find(sneaker_id)
 
-            client = Aws::Rekognition::Client.new
-            resp = client.detect_text({
-                    image: { bytes: @sneaker.sneaker_image.download }
-            })
+            config = {
+                logger: xray_logger
+              }
+              
+            XRay.recorder.configure(config)
 
-            if resp.text_detections.count == 0 
-                detection_logger.info("No text detected for Image: #{sneaker_id}")
-            end              
+            segment = XRay.recorder.begin_segment 'imagetrends'
+            XRay.recorder.capture('detect_labels', segment: segment) do |subsegment|
 
-            resp.text_detections.each do |label|
 
-                puts "#{label.detected_text}-#{label.confidence.to_i}"
+                client = Aws::Rekognition::Client.new
+                resp = client.detect_text({
+                        image: { bytes: @sneaker.sneaker_image.download }
+                })
 
-                if label.confidence.to_i > 80 && label.type == "WORD"
-                    @tag = Tag.new
-                    @tag.name = label.detected_text
-                    @tag.confidence = label.confidence
-                    @tag.source = "Rekognition - Detect Text"
-                    @tag.sneaker = @sneaker
-                    @tag.save
+                if resp.text_detections.count == 0 
+                    detection_logger.info("No text detected for Image: #{sneaker_id}")
+                end              
 
-                    detection_logger.info("Text detected in Image: #{sneaker_id} Text: #{@tag.name} Confidence: #{@tag.confidence}")
+                resp.text_detections.each do |label|
+
+                    puts "#{label.detected_text}-#{label.confidence.to_i}"
+
+                    if label.confidence.to_i > 80 && label.type == "WORD"
+                        @tag = Tag.new
+                        @tag.name = label.detected_text
+                        @tag.confidence = label.confidence
+                        @tag.source = "Rekognition - Detect Text"
+                        @tag.sneaker = @sneaker
+                        @tag.save
+
+                        detection_logger.info("Text detected in Image: #{sneaker_id} Text: #{@tag.name} Confidence: #{@tag.confidence}")
+                    end
+                    
                 end
-
             end
+
+            XRay.recorder.end_segment
+
             rescue StandardError => e
                 puts("--------------------------------- [ERROR] ---------------------------------")
                 puts(e)
@@ -45,6 +59,10 @@ class DetectTextJob
 
     def detection_logger
         @@detection_logger ||= Logger.new("#{Rails.root}/log/application.log")
+    end
+
+    def xray_logger
+        @@xray_logger ||= Logger.new("#{Rails.root}/log/xray.log")
     end
 
 end
