@@ -19,15 +19,18 @@
       <%= image_tag @sneaker.sneaker_image.variant(resize: "600x400"), :class => "img-fluid img-thumbnail" %>
     </figure>
         
-    <% if @favorited == false %>
-      <%= form_for Favorite.new do |f| %>
-          <%= f.hidden_field :sneaker_id, value: @sneaker.id %>
-          <%= f.hidden_field :user_id, value: current_user.id %></td>
-          <%= f.button "<i class='fa fa-heart'></i> #{!@sneaker.favorites.nil? ? @sneaker.favorites.count : "0" }".html_safe, type: :submit, :class => "btn btn-outline-secondary pull-right" %>
+    <% if current_user %>
+      <% if @favorited == false %>
+        <%= form_for Favorite.new do |f| %>
+            <%= f.hidden_field :sneaker_id, value: @sneaker.id %>
+            <%= f.hidden_field :user_id, value: current_user.id %></td>
+            <%= f.button "<i class='fa fa-heart'></i> #{!@sneaker.favorites.nil? ? @sneaker.favorites.count : "0" }".html_safe, type: :submit, :class => "btn btn-outline-secondary pull-right" %>
+        <% end %>
+      <% else %>
+        <%= link_to "<i class='fa fa-heart'> #{@sneaker.favorites.count}</i>".html_safe, favorite_path(@favorite), :method => :delete, :class => "btn btn-outline-light pull-right", :style => "color: red;" %>
       <% end %>
-    <% else %>
-      <%= link_to "<i class='fa fa-heart'> #{@sneaker.favorites.count}</i>".html_safe, favorite_path(@favorite), :method => :delete, :class => "btn btn-outline-light pull-right", :style => "color: red;" %>
     <% end %>
+
   </div>
   <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
     <h5>Image Details</h5>

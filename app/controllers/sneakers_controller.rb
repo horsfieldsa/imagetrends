@@ -53,11 +53,13 @@ class SneakersController < ApplicationController
   # GET /sneakers/id
   def show
 
-    if Favorite.where("user_id = ? AND sneaker_id = ?", current_user.id, @sneaker.id).count > 0
-      @favorited = true
-      @favorite = Favorite.find_by_user_id_and_sneaker_id(current_user.id, @sneaker.id)
-    else
-      @favorited = false
+    if current_user
+      if Favorite.where("user_id = ? AND sneaker_id = ?", current_user.id, @sneaker.id).count > 0
+        @favorited = true
+        @favorite = Favorite.find_by_user_id_and_sneaker_id(current_user.id, @sneaker.id)
+      else
+        @favorited = false
+      end
     end
 
     image_logger.info("Showing Details for Image: #{@sneaker.id}")
