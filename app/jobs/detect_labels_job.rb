@@ -4,6 +4,14 @@ class DetectLabelsJob
   
     def perform(sneaker_id)
 
+        user_config = {
+            name: 'imagetrends',
+            context_missing: 'LOG_ERROR',
+            patch: %I[net_http aws_sdk]
+          }
+          
+        XRay.recorder.configure(user_config)
+
         segment = XRay.recorder.begin_segment 'imagetrends'
 
         annotations = {
@@ -12,7 +20,7 @@ class DetectLabelsJob
           
         segment.annotations.update annotations
 
-        XRay.recorder.capture('detect_labels') do |subsegment|
+        XRay.recorder.capture('detect_labels', segment: segment) do |subsegment|
 
             begin
 
