@@ -49,6 +49,7 @@ Resources:
     Properties:
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/AmazonRekognitionReadOnlyAccess
+        - arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess
       AssumeRolePolicyDocument: 
         Version: "2012-10-17"
         Statement: 
@@ -91,6 +92,7 @@ Resources:
             #!/bin/bash -xe
             service docker start
             REGION=`curl http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
+            nohup /usr/bin/xray -o -n ${REGION} &
             iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 3000
             docker run -d --label=imagetrends -it -v /opt/imagetrends-logs:/app/log -e "AWS_REGION=${REGION}" --network=host --restart=unless-stopped imagetrends:latest
   
