@@ -6,14 +6,15 @@ services:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
-    network_mode: host      
     environment:
       MYSQL_ROOT_PASSWORD: imagetrends
 
   ui:
-    image: imagetrends
+    image: imagetrends:latest
     restart: always
     network_mode: host
+    links:
+      - db
     volumes:
       - /opt/imagetrends-logs:/app/log
     depends_on:
@@ -22,7 +23,7 @@ services:
       DB_NAME: imagetrends
       DB_USER: root
       DB_PASS: imagetrends
-      DB_HOST: 127.0.0.1
+      DB_HOST: db
       DB_PORT: 3306
       RAILS_ENV: production
       RAILS_MASTER_KEY: cdf56d76316a62b4532137d4fbb7b1b5
