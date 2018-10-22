@@ -3,17 +3,24 @@ class DetectCelebritiesJob
   
     def perform(sneaker_id)
         begin
-            detection_logger.info("Attempting to detect celebrities for Image #{sneaker_id}")
+            detection_logger.info("Attempting to detect celebrities for Image: #{sneaker_id}")
             @sneaker = Sneaker.find(sneaker_id)
 
             config = {
                 logger: xray_logger
-              }
+              }  
               
             XRay.recorder.configure(config)
 
             segment = XRay.recorder.begin_segment 'imagetrends'
             XRay.recorder.capture('detect_celebrities', segment: segment) do |subsegment|
+
+                job_annotations = { 
+                    image_id: @sneaker.id,
+                    user_name: @sneaker.user.username,
+                    user_id: @sneaker.user.id
+                }
+                subsegment.annotations.update job_annotations
 
                 client = Aws::Rekognition::Client.new
                 resp = client.recognize_celebrities({

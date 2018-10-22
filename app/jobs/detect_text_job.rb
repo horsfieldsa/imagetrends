@@ -3,7 +3,7 @@ class DetectTextJob
   
     def perform(sneaker_id)
         begin
-            detection_logger.info("Attempting to detect text for Image #{sneaker_id}")
+            detection_logger.info("Attempting to detect text for Image: #{sneaker_id}")
             @sneaker = Sneaker.find(sneaker_id)
 
             config = {
@@ -15,6 +15,12 @@ class DetectTextJob
             segment = XRay.recorder.begin_segment 'imagetrends'
             XRay.recorder.capture('detect_text', segment: segment) do |subsegment|
 
+                job_annotations = { 
+                    image_id: @sneaker.id,
+                    user_name: @sneaker.user.username,
+                    user_id: @sneaker.user.id
+                }
+                subsegment.annotations.update job_annotations
 
                 client = Aws::Rekognition::Client.new
                 resp = client.detect_text({

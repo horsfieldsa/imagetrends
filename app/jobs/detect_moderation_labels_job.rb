@@ -4,7 +4,7 @@ class DetectModerationLabelsJob
     def perform(sneaker_id)
         begin
 
-            detection_logger.info("Attempting to detect labels for Image #{sneaker_id}")
+            detection_logger.info("Attempting to detect moderation labels for Image: #{sneaker_id}")
             @sneaker = Sneaker.find(sneaker_id)
 
             config = {
@@ -16,8 +16,12 @@ class DetectModerationLabelsJob
             segment = XRay.recorder.begin_segment 'imagetrends'
             XRay.recorder.capture('detect_moderation_labels', segment: segment) do |subsegment|
 
-                detection_logger.info("Attempting to detect moderation labels for Image #{sneaker_id}")
-                @sneaker = Sneaker.find(sneaker_id)
+                job_annotations = { 
+                    image_id: @sneaker.id,
+                    user_name: @sneaker.user.username,
+                    user_id: @sneaker.user.id
+                }
+                subsegment.annotations.update job_annotations
 
                 client = Aws::Rekognition::Client.new
                 resp = client.detect_moderation_labels({

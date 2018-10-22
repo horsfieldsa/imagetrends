@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to main_app.root_url, :alert => exception.message
-    application_logger.warn("Access Denied - Action: #{params[:action]} - Controller: #{params[:controller]} - Event: #{exception.message}")
+    application_logger.warn("Access Denied - Action: #{params[:action]} Controller: #{params[:controller]} Event: #{exception.message}")
   end
 
   private
@@ -16,9 +16,9 @@ class ApplicationController < ActionController::Base
 
   def log_action
     if current_user
-      application_logger.info("Navigation Event - Action: #{params[:action]} - Controller: #{params[:controller]} - User: #{current_user.id}")
+      application_logger.info("Navigation Event - Action: #{params[:action]} Controller: #{params[:controller]} User: #{current_user.username}")
     else
-      application_logger.info("Navigation Event - Action: #{params[:action]} - Controller: #{params[:controller]} - User: Not Logged On")
+      application_logger.info("Navigation Event - Action: #{params[:action]} Controller: #{params[:controller]} User: Not Logged On")
     end
   end
 

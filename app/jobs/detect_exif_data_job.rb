@@ -17,7 +17,7 @@ class DetectExifDataJob
             
             if has_exif
                 model = EXIFR::JPEG.new('/tmp/image.jpg').model
-                detection_logger.info("Exif Data for Image: #{sneaker_id} Model: #{model}")
+                detection_logger.info("EXIF data for Image: #{sneaker_id} Model: #{model}")
 
                 @tag = Tag.new
                 @tag.name = "Camera: #{model ? model : "Not Detected"}"

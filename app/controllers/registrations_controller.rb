@@ -1,14 +1,13 @@
 class RegistrationsController < Devise::RegistrationsController
 
-
     def create
       super
-      registration_logger.info "Attempting create new user."
+      registration_logger.info "Attempting to register new user."
     end
 
     def update
       super
-      registration_logger.info "Attempting to update user profile."
+      registration_logger.info "Updating profile for User: #{current_user.username}"
     end
 
     private

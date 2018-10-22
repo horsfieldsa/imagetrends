@@ -7,7 +7,6 @@ Rails.application.routes.draw do
 
   get 'uploaded', to: 'sneakers#uploaded'
   get 'trends', to: 'trends#index'
-  get 'unapproved', to: 'sneakers#unapproved'
   get '/sneakers/tag/:name', to: 'sneakers#find'
 
   root 'sneakers#index'
