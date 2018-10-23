@@ -2,7 +2,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :sneakers, dependent: :delete_all
+  has_many :images, dependent: :delete_all
   has_many :favorites, dependent: :delete_all
 
   validates :username, presence: true

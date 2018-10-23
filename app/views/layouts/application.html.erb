@@ -83,19 +83,19 @@
        <% end %>
        <div class="d-none d-xl-block d-lg-block d-md-block">
          <ul class="nav top-nav nav-pills justify-content-center">
-           <li class="nav-item <%= 'active' if params[:controller] == 'sneakers' && params[:action] == 'index' && !request.query_string.present? %>
-                               <%= 'active' if params[:controller] == 'sneakers' && params[:action] == 'show' && !request.query_string.present? %>">
+           <li class="nav-item <%= 'active' if params[:controller] == 'images' && params[:action] == 'index' && !request.query_string.present? %>
+                               <%= 'active' if params[:controller] == 'images' && params[:action] == 'show' && !request.query_string.present? %>">
              <a class="nav-link"
                 href="/"><i class="fa fa-clock-o" aria-hidden="true"></i> Recent</a>
            </li>
            <% if user_signed_in? %>
-            <li class="nav-item <%= 'active' if params[:controller] == 'sneakers' && params[:action] == 'index' && request.query_string.present? %>">
-              <%= link_to '<i class="fa fa-upload"></i> My Uploads'.html_safe, sneakers_path(:view => "user"), :class => 'nav-link'%>
+            <li class="nav-item <%= 'active' if params[:controller] == 'images' && params[:action] == 'index' && request.query_string.present? %>">
+              <%= link_to '<i class="fa fa-upload"></i> My Uploads'.html_safe, images_path(:view => "user"), :class => 'nav-link'%>
             </li>
            <% end %>           
            <li class="nav-item <%= 'active' if params[:controller] == 'tags' && params[:action] == 'index' %>
-                               <%= 'active' if params[:controller] == 'sneakers' && params[:action] == 'find' %>
-                               <%= 'active' if params[:controller] == 'sneakers' && params[:action] == 'unapproved' %>">
+                               <%= 'active' if params[:controller] == 'images' && params[:action] == 'find' %>
+                               <%= 'active' if params[:controller] == 'images' && params[:action] == 'unapproved' %>">
              <a class="nav-link"
               href="/tags"><i class="fa fa-tags" aria-hidden="true"></i> Tags</a>
            </li>
@@ -114,18 +114,18 @@
 
        <div class="d-xl-none d-lg-none d-md-none">
          <ul class="nav top-nav nav-pills justify-content-center hidden-sm-up">
-           <li class="nav-item <%= 'active' if params[:controller] == 'sneakers' && params[:action] == 'index' && !request.query_string.present?%>">
+           <li class="nav-item <%= 'active' if params[:controller] == 'images' && params[:action] == 'index' && !request.query_string.present?%>">
              <a class="nav-link"
               href="/"><i class="fa fa-clock-o" aria-hidden="true"></i></a>
            </li>
            <% if user_signed_in? %>
-            <li class="nav-item <%= 'active' if params[:controller] == 'sneakers' && params[:action] == 'index' && request.query_string.present? %>">
-              <%= link_to '<i class="fa fa-upload"></i>'.html_safe, sneakers_path(:view => "user"), :class => 'nav-link'%>
+            <li class="nav-item <%= 'active' if params[:controller] == 'images' && params[:action] == 'index' && request.query_string.present? %>">
+              <%= link_to '<i class="fa fa-upload"></i>'.html_safe, images_path(:view => "user"), :class => 'nav-link'%>
             </li>
            <% end %>            
            <li class="nav-item <%= 'active' if params[:controller] == 'tags' && params[:action] == 'index'%>
-                               <%= 'active' if params[:controller] == 'sneakers' && params[:action] == 'find'%>
-                               <%= 'active' if params[:controller] == 'sneakers' && params[:action] == 'unapproved'%>">
+                               <%= 'active' if params[:controller] == 'images' && params[:action] == 'find'%>
+                               <%= 'active' if params[:controller] == 'images' && params[:action] == 'unapproved'%>">
              <a class="nav-link"
               href="/tags"><i class="fa fa-tags" aria-hidden="true"></i></a>
            </li>
@@ -174,11 +174,11 @@
             </button>
           </div>
           <!-- Put Upload Form Here -->
-          <%= form_for @new_sneaker do |f| %>
+          <%= form_for @new_image do |f| %>
             <div class="modal-body text-center">
                 <%= image_tag("upload.png", height: 50, width: 10, border: 0, :class => "image_to_upload img-thumbnail") %>
                 <label class="custom-file-upload btn btn-outline-dark">
-                  <%= f.file_field :sneaker_image, direct_upload: true, accept: 'image/png,image/gif,image/jpeg' %>
+                  <%= f.file_field :image_image, direct_upload: true, accept: 'image/png,image/gif,image/jpeg' %>
                   Select Image
                 </label>
             </div>

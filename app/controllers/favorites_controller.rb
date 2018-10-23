@@ -8,10 +8,10 @@ class FavoritesController < ApplicationController
 
     respond_to do |format|
       if @favorite.save
-        format.html { redirect_to @favorite.sneaker}
+        format.html { redirect_to @favorite.image}
         format.json { render :show, status: :created, location: @favorite }
       else
-        format.html { redirect_to @favorite.sneaker, notice: 'Unable to mark image as a favorite.' }
+        format.html { redirect_to @favorite.image, notice: 'Unable to mark image as a favorite.' }
         format.json { render json: @favorite.errors, status: :unprocessable_entity }
       end
     end
@@ -20,10 +20,10 @@ class FavoritesController < ApplicationController
   # DELETE /favorites/1
   # DELETE /favorites/1.json
   def destroy
-    @sneaker = @favorite.sneaker
+    @image = @favorite.image
     @favorite.destroy
     respond_to do |format|
-      format.html { redirect_to @sneaker }
+      format.html { redirect_to @image }
       format.json { head :no_content }
     end
   end
@@ -35,6 +35,6 @@ class FavoritesController < ApplicationController
     end
 
     def favorite_params
-      params.require(:favorite).permit(:sneaker_id, :user_id)
+      params.require(:favorite).permit(:image_id, :user_id)
     end
 end

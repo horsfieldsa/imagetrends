@@ -6,7 +6,7 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.json
   def index
-    @tags_distinct = Tag.group(:name).joins(:sneaker).where(:sneakers => {:approved => true})
+    @tags_distinct = Tag.group(:name).joins(:image).where(:images => {:approved => true})
     tag_logger.info("Loading a list of tags: #{@tags_distinct.count}")
   end
 
@@ -16,7 +16,7 @@ class TagsController < ApplicationController
     end
 
     def tag_params
-      params.require(:tag).permit(:sneaker_id, :name)
+      params.require(:tag).permit(:image_id, :name)
     end
     
     def tag_logger

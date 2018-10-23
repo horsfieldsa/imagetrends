@@ -34,17 +34,22 @@ ActiveRecord::Schema.define(version: 2018_10_15_231645) do
   end
 
   create_table "favorites", force: :cascade do |t|
-    t.integer "sneaker_id"
+    t.integer "image_id"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-# Could not dump table "sneakers" because of following StandardError
-#   Unknown type 'bool' for column 'approved'
+  create_table "images", force: :cascade do |t|
+    t.string "image_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "approved"
+    t.integer "user_id"
+  end
 
   create_table "tags", force: :cascade do |t|
-    t.integer "sneaker_id"
+    t.integer "image_id"
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

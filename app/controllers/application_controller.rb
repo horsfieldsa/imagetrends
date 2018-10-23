@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery unless: -> { request.format.json? }
-  before_action :create_sneaker
+  before_action :create_image
   before_action :log_action
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -15,8 +15,8 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def create_sneaker
-    @new_sneaker = Sneaker.new
+  def create_image
+    @new_image = Image.new
   end
 
   def log_action

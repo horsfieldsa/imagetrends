@@ -3,7 +3,7 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).on 'turbolinks:load', (event) ->
-  if $('.pagination').length && $('#sneakers').length
+  if $('.pagination').length && $('#images').length
     $(window).scroll ->
       url = $('.pagination .next_page').attr('href')
       if url && $(window).scrollTop() > $(document).height() - $(window).height() - 50
@@ -21,7 +21,7 @@ $(document).on 'turbolinks:load', (event) ->
 
 ready_post = ->
   # Display the image to be uploaded.
-  $('#sneaker_sneaker_image').on 'change', (e) ->
+  $('#image_image_image').on 'change', (e) ->
     readURL(this);
 
   readURL = (input) ->

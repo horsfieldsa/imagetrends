@@ -1,9 +1,9 @@
 
 <div class="col-lg-3 col-md-3 col-xs-6">
   <figure class="figure">
-    <!-- <a href="#" data-toggle="modal" data-target="#modal-<%= sneaker.id %>"> -->
-    <a href="/sneakers/<%= sneaker.id %>">
-      <%= image_tag sneaker.sneaker_image.variant(resize: "300x200"), :class => "img-fluid img-thumbnail" %>
+    <!-- <a href="#" data-toggle="modal" data-target="#modal-<%= image.id %>"> -->
+    <a href="/images/<%= image.id %>">
+      <%= image_tag image.image_image.variant(resize: "300x200"), :class => "img-fluid img-thumbnail" %>
     </a>
     <figcaption class="figure-caption text-center">
     </span>
@@ -12,7 +12,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modal-<%= sneaker.id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal-<%= image.id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -21,42 +21,42 @@
             <i class="fa fa-circle fa-stack-2x"></i>
             <i class="fa fa-user fa-stack-1x fa-inverse"></i>
           </span>
-            <%= sneaker.user.username %>
+            <%= image.user.username %>
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div class="row" id='sneaker'>
+        <div class="row" id='image'>
           <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <center>
             <figure class="figure">
-              <%= image_tag sneaker.sneaker_image.variant(resize: "600x400"), :class => "img-fluid img-thumbnail" %>
+              <%= image_tag image.image_image.variant(resize: "600x400"), :class => "img-fluid img-thumbnail" %>
             </figure>
           </center>
           </div>
           <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <table class="table text-center">
               <tr>
-                <td><%= sneaker.created_at.strftime("%m/%d/%Y") %> <%= sneaker.created_at.strftime("%I:%M%p") %></td>
+                <td><%= image.created_at.strftime("%m/%d/%Y") %> <%= image.created_at.strftime("%I:%M%p") %></td>
               </tr>
               <tr>
                 <td>
-                 <% if sneaker.approved == false %><span class="badge badge-danger">Unapproved</span><% end %>
-                  <% if sneaker.tags.count > 0 %>
-                    <% sneaker.tags.each do |tag| %>
+                 <% if image.approved == false %><span class="badge badge-danger">Unapproved</span><% end %>
+                  <% if image.tags.count > 0 %>
+                    <% image.tags.each do |tag| %>
                       <% if tag.source == "Rekognition - Detect Labels"%>
-                        <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-secondary" %>
+                        <%= link_to tag.name, "/images/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-secondary" %>
                       <% end %>
                       <% if tag.source == "Rekognition - Detect Moderation Labels"%>
-                        <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-success" %>
+                        <%= link_to tag.name, "/images/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-success" %>
                       <% end %>   
                        <% if tag.source == "Rekognition - Detect Text"%>
-                        <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-warning" %>
+                        <%= link_to tag.name, "/images/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-warning" %>
                       <% end %>
                       <% if tag.source == "Rekognition - Recognize Celebrities"%>
-                        <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-info" %>
+                        <%= link_to tag.name, "/images/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-info" %>
                       <% end %>                                                             
                     <% end %>
                   <% else %>

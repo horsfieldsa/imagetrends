@@ -1,14 +1,14 @@
 <a href="javascript:" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
-<% if @sneakers.count == 0 %>
+<% if @images.count == 0 %>
   <div class="card text-white bg-danger">
     <div class="card-body">
       <p class="card-text">No images to display, upload an image to get started!</p>
     </div>
   </div>
 <% else %>
-  <div class="row text-center text-lg-left" id='sneakers'>
-    <%= render @sneakers %>
+  <div class="row text-center text-lg-left" id='images'>
+    <%= render @images %>
   </div>
 
-  <%= will_paginate @sneakers %>
+  <%= will_paginate @images %>
 <% end %>

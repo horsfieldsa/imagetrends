@@ -1,10 +1,10 @@
 class DetectTextJob
     include SuckerPunch::Job
   
-    def perform(sneaker_id)
+    def perform(image_id)
         begin
-            detection_logger.info("Attempting to detect text for Image: #{sneaker_id}")
-            @sneaker = Sneaker.find(sneaker_id)
+            detection_logger.info("Attempting to detect text for Image: #{image_id}")
+            @image = Image.find(image_id)
 
             config = {
                 logger: xray_logger
@@ -16,19 +16,19 @@ class DetectTextJob
             XRay.recorder.capture('detect_text', segment: segment) do |subsegment|
 
                 job_annotations = { 
-                    image_id: @sneaker.id,
-                    user_name: @sneaker.user.username,
-                    user_id: @sneaker.user.id
+                    image_id: @image.id,
+                    user_name: @image.user.username,
+                    user_id: @image.user.id
                 }
                 subsegment.annotations.update job_annotations
 
                 client = Aws::Rekognition::Client.new
                 resp = client.detect_text({
-                        image: { bytes: @sneaker.sneaker_image.download }
+                        image: { bytes: @image.image_image.download }
                 })
 
                 if resp.text_detections.count == 0 
-                    detection_logger.info("No text detected for Image: #{sneaker_id}")
+                    detection_logger.info("No text detected for Image: #{image_id}")
                 end              
 
                 resp.text_detections.each do |label|
@@ -40,10 +40,10 @@ class DetectTextJob
                         @tag.name = label.detected_text
                         @tag.confidence = label.confidence
                         @tag.source = "Rekognition - Detect Text"
-                        @tag.sneaker = @sneaker
+                        @tag.image = @image
                         @tag.save
 
-                        detection_logger.info("Text detected in Image: #{sneaker_id} Text: #{@tag.name} Confidence: #{@tag.confidence}")
+                        detection_logger.info("Text detected in Image: #{image_id} Text: #{@tag.name} Confidence: #{@tag.confidence}")
                     end
                     
                 end
@@ -57,9 +57,9 @@ class DetectTextJob
                 @tag = Tag.new
                 @tag.name = "Error"
                 @tag.source = "Rekognition - Detect Text"
-                @tag.sneaker = @sneaker
+                @tag.image = @image
                 @tag.save
-                detection_logger.error("Error detecting text for Image: #{sneaker_id} Details: #{e}")
+                detection_logger.error("Error detecting text for Image: #{image_id} Details: #{e}")
         end
     end
 

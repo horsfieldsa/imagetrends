@@ -7,7 +7,7 @@ class Ability
       can :manage, :all
       can :access, :rails_admin
     else
-      can :manage, Sneaker, :user_id => user.id
+      can :manage, Image, :user_id => user.id
     end
   end
 end

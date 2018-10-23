@@ -1,11 +1,11 @@
 class DetectModerationLabelsJob
     include SuckerPunch::Job
   
-    def perform(sneaker_id)
+    def perform(image_id)
         begin
 
-            detection_logger.info("Attempting to detect moderation labels for Image: #{sneaker_id}")
-            @sneaker = Sneaker.find(sneaker_id)
+            detection_logger.info("Attempting to detect moderation labels for Image: #{image_id}")
+            @image = Image.find(image_id)
 
             config = {
                 logger: xray_logger
@@ -17,37 +17,37 @@ class DetectModerationLabelsJob
             XRay.recorder.capture('detect_moderation_labels', segment: segment) do |subsegment|
 
                 job_annotations = { 
-                    image_id: @sneaker.id,
-                    user_name: @sneaker.user.username,
-                    user_id: @sneaker.user.id
+                    image_id: @image.id,
+                    user_name: @image.user.username,
+                    user_id: @image.user.id
                 }
                 subsegment.annotations.update job_annotations
 
                 client = Aws::Rekognition::Client.new
                 resp = client.detect_moderation_labels({
-                        image: { bytes: @sneaker.sneaker_image.download }, 
+                        image: { bytes: @image.image_image.download }, 
                         min_confidence: 75,
                 })
 
                 if resp.moderation_labels.count == 0 
-                    detection_logger.info("No moderation labels detected for Image: #{sneaker_id}")
+                    detection_logger.info("No moderation labels detected for Image: #{image_id}")
                 end           
 
                 resp.moderation_labels.each do |label|
                     @tag = Tag.new
                     @tag.name = label.name
-                    @tag.sneaker = @sneaker
+                    @tag.image = @image
                     @tag.confidence = label.confidence
                     @tag.source = "Rekognition - Detect Moderation Labels"               
                     @tag.save
 
                     if label.name == 'Suggestive' && label.confidence > 80
-                        @sneaker.approved = false
-                        @sneaker.save
-                        detection_logger.warn("Inappropriate content detected, unapproving image #{sneaker_id}: #{@tag.name}")
+                        @image.approved = false
+                        @image.save
+                        detection_logger.warn("Inappropriate content detected, unapproving image #{image_id}: #{@tag.name}")
                     end
 
-                    detection_logger.info("Moderation label detected for Image: #{sneaker_id} Name: #{@tag.name} Confidence: #{@tag.confidence}")
+                    detection_logger.info("Moderation label detected for Image: #{image_id} Name: #{@tag.name} Confidence: #{@tag.confidence}")
 
                 end
             
@@ -61,9 +61,9 @@ class DetectModerationLabelsJob
                 @tag = Tag.new
                 @tag.name = "Error"
                 @tag.source = "Rekognition - Detect Moderation Labels"
-                @tag.sneaker = @sneaker
+                @tag.image = @image
                 @tag.save
-                detection_logger.error("Error detecting moderation labels for Image: #{sneaker_id} Details: #{e}")
+                detection_logger.error("Error detecting moderation labels for Image: #{image_id} Details: #{e}")
         end
     end
 

@@ -1,33 +1,33 @@
 <%= link_to '<i class="fa fa-arrow-left" aria-hidden="true"></i>'.html_safe, :back, :class => "btn btn-outline-secondary" %>
-<%= link_to '<i class="fa fa-download"></i> Download'.html_safe, rails_blob_path(@sneaker.sneaker_image, disposition: "attachment"),
+<%= link_to '<i class="fa fa-download"></i> Download'.html_safe, rails_blob_path(@image.image_image, disposition: "attachment"),
              :class => "btn btn-outline-secondary pull-right ml-2" %>
 <% if current_user %>
-  <% if @sneaker.user.id == current_user.id %>
-    <%= link_to '<i class="fa fa-trash"></i> Delete'.html_safe, sneaker_path(@sneaker), data: {:confirm => 'Are you sure?'}, :method => :delete, :class => "btn btn-outline-danger pull-right" %>
+  <% if @image.user.id == current_user.id %>
+    <%= link_to '<i class="fa fa-trash"></i> Delete'.html_safe, image_path(@image), data: {:confirm => 'Are you sure?'}, :method => :delete, :class => "btn btn-outline-danger pull-right" %>
   <% end %>
   
 <% end %>
 <hr/>
-<% if @sneaker.approved == 0 %>
+<% if @image.approved == 0 %>
   <div class="alert alert-danger" role="alert">
    This image has been moderated and blocked from the main feed, likely due to suggestive content. Review the image's tags for details.
   </div>
 <% end %>
-<div class="row" id='sneaker'>
+<div class="row" id='image'>
   <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
     <figure class="figure">
-      <%= image_tag @sneaker.sneaker_image.variant(resize: "600x400"), :class => "img-fluid img-thumbnail" %>
+      <%= image_tag @image.image_image.variant(resize: "600x400"), :class => "img-fluid img-thumbnail" %>
     </figure>
         
     <% if current_user %>
       <% if @favorited == false %>
         <%= form_for Favorite.new do |f| %>
-            <%= f.hidden_field :sneaker_id, value: @sneaker.id %>
+            <%= f.hidden_field :image_id, value: @image.id %>
             <%= f.hidden_field :user_id, value: current_user.id %></td>
-            <%= f.button "<i class='fa fa-heart'></i> #{!@sneaker.favorites.nil? ? @sneaker.favorites.count : "0" }".html_safe, type: :submit, :class => "btn btn-outline-secondary pull-right" %>
+            <%= f.button "<i class='fa fa-heart'></i> #{!@image.favorites.nil? ? @image.favorites.count : "0" }".html_safe, type: :submit, :class => "btn btn-outline-secondary pull-right" %>
         <% end %>
       <% else %>
-        <%= link_to "<i class='fa fa-heart'> #{@sneaker.favorites.count}</i>".html_safe, favorite_path(@favorite), :method => :delete, :class => "btn btn-outline-light pull-right", :style => "color: red;" %>
+        <%= link_to "<i class='fa fa-heart'> #{@image.favorites.count}</i>".html_safe, favorite_path(@favorite), :method => :delete, :class => "btn btn-outline-light pull-right", :style => "color: red;" %>
       <% end %>
     <% end %>
 
@@ -37,32 +37,32 @@
     <table class="table">
       <tr>
         <td>Uploaded On</td>
-        <td><%= @sneaker.created_at.strftime("%m/%d/%Y") %> <%= @sneaker.created_at.strftime("%I:%M%p") %></td>
+        <td><%= @image.created_at.strftime("%m/%d/%Y") %> <%= @image.created_at.strftime("%I:%M%p") %></td>
       </tr>
       <tr>
         <td>Tags</td>
         <td>
-           <% if @sneaker.tags.count > 0 %>
-            <% @sneaker.tags.each do |tag| %>
+           <% if @image.tags.count > 0 %>
+            <% @image.tags.each do |tag| %>
 
               <% if tag.name == "Error" %>
-                <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.source}", :class => "badge badge-danger" %>
+                <%= link_to tag.name, "/images/tag/#{tag.name}", :title => "#{tag.source}", :class => "badge badge-danger" %>
               <% else %>
 
                 <% if tag.source == "Rekognition - Detect Labels"%>
-                  <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-secondary" %>
+                  <%= link_to tag.name, "/images/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-secondary" %>
                 <% end %>
                 <% if tag.source == "Rekognition - Detect Moderation Labels"%>
-                  <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-success" %>
+                  <%= link_to tag.name, "/images/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-success" %>
                 <% end %>   
                   <% if tag.source == "Rekognition - Detect Text"%>
-                  <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-warning" %>
+                  <%= link_to tag.name, "/images/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-warning" %>
                 <% end %>
                 <% if tag.source == "Rekognition - Recognize Celebrities"%>
-                  <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-info" %>
+                  <%= link_to tag.name, "/images/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-info" %>
                 <% end %> 
                 <% if tag.source == "Extract EXIF Data"%>
-                  <%= link_to tag.name, "/sneakers/tag/#{tag.name}", :title => "#{tag.name}", :class => "badge badge-dark" %>
+                  <%= link_to tag.name, "/images/tag/#{tag.name}", :title => "#{tag.name}", :class => "badge badge-dark" %>
                 <% end %> 
               <% end %>                                                            
             <% end %>
@@ -84,10 +84,10 @@
       <tr>
         <td>Favorited By</td>
         <td>
-          <% if @sneaker.favorites.count == 0 %>
+          <% if @image.favorites.count == 0 %>
             <span class="badge badge-secondary"> Nobody </span>
           <% else %>
-            <% @sneaker.favorites.each do |favorite| %>
+            <% @image.favorites.each do |favorite| %>
             <span class="badge badge-secondary"> <%= favorite.user.username %> </span>
             <% end %>
           <% end %>

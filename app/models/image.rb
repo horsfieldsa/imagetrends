@@ -1,8 +1,8 @@
-class Sneaker < ApplicationRecord
+class Image < ApplicationRecord
 
   has_many :tags, dependent: :delete_all
   has_many :favorites, dependent: :delete_all
-  has_one_attached :sneaker_image
+  has_one_attached :image_image
   belongs_to :user
 
   after_create_commit :detect_labels, :log_create
@@ -24,19 +24,19 @@ class Sneaker < ApplicationRecord
   private
 
   def log_create
-    sneaker_logger.info("Image created: User: #{self.user.username} Image: #{self.id} ")
+    image_logger.info("Image created: User: #{self.user.username} Image: #{self.id} ")
   end
 
   def log_update
-    sneaker_logger.info("Image updated: User: #{self.user.username} Image: #{self.id} ")
+    image_logger.info("Image updated: User: #{self.user.username} Image: #{self.id} ")
   end
 
   def log_destroy
-    sneaker_logger.info("Image deleted: User: #{self.user.username} Image: #{self.id} ")
+    image_logger.info("Image deleted: User: #{self.user.username} Image: #{self.id} ")
   end
 
-  def sneaker_logger
-    @@sneaker_logger ||= Logger.new("#{Rails.root}/log/application.log")
+  def image_logger
+    @@image_logger ||= Logger.new("#{Rails.root}/log/application.log")
   end
 
 end

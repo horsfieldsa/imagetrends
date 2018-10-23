@@ -1,10 +1,10 @@
 class DetectCelebritiesJob
     include SuckerPunch::Job
   
-    def perform(sneaker_id)
+    def perform(image_id)
         begin
-            detection_logger.info("Attempting to detect celebrities for Image: #{sneaker_id}")
-            @sneaker = Sneaker.find(sneaker_id)
+            detection_logger.info("Attempting to detect celebrities for Image: #{image_id}")
+            @image = Image.find(image_id)
 
             config = {
                 logger: xray_logger
@@ -16,19 +16,19 @@ class DetectCelebritiesJob
             XRay.recorder.capture('detect_celebrities', segment: segment) do |subsegment|
 
                 job_annotations = { 
-                    image_id: @sneaker.id,
-                    user_name: @sneaker.user.username,
-                    user_id: @sneaker.user.id
+                    image_id: @image.id,
+                    user_name: @image.user.username,
+                    user_id: @image.user.id
                 }
                 subsegment.annotations.update job_annotations
 
                 client = Aws::Rekognition::Client.new
                 resp = client.recognize_celebrities({
-                        image: { bytes: @sneaker.sneaker_image.download }
+                        image: { bytes: @image.image_image.download }
                 })
 
                 if resp.celebrity_faces.count == 0 
-                    detection_logger.info("No celebrieties detected for Image: #{sneaker_id}")
+                    detection_logger.info("No celebrieties detected for Image: #{image_id}")
                 end
 
                 resp.celebrity_faces.each do |label|
@@ -38,10 +38,10 @@ class DetectCelebritiesJob
                     @tag.name = label.name
                     @tag.confidence = label.match_confidence
                     @tag.source = "Rekognition - Recognize Celebrities"
-                    @tag.sneaker = @sneaker
+                    @tag.image = @image
                     @tag.save
 
-                    detection_logger.info("Celebrity detected for Image: #{sneaker_id} Name: #{@tag.name} Confidence: #{@tag.confidence}")
+                    detection_logger.info("Celebrity detected for Image: #{image_id} Name: #{@tag.name} Confidence: #{@tag.confidence}")
 
                 end
 
@@ -55,9 +55,9 @@ class DetectCelebritiesJob
                 @tag = Tag.new
                 @tag.name = "Error"
                 @tag.source = "Rekognition - Recognize Celebrities"
-                @tag.sneaker = @sneaker
+                @tag.image = @image
                 @tag.save
-                detection_logger.error("Error detecting celebrities for Image: #{sneaker_id} Details: #{e}")
+                detection_logger.error("Error detecting celebrities for Image: #{image_id} Details: #{e}")
         end
     end
 

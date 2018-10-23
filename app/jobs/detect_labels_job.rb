@@ -1,11 +1,11 @@
 class DetectLabelsJob
     include SuckerPunch::Job
   
-    def perform(sneaker_id)
+    def perform(image_id)
         begin
 
-            detection_logger.info("Attempting to detect labels for Image: #{sneaker_id}")
-            @sneaker = Sneaker.find(sneaker_id)
+            detection_logger.info("Attempting to detect labels for Image: #{image_id}")
+            @image = Image.find(image_id)
 
             config = {
                 logger: xray_logger
@@ -18,21 +18,21 @@ class DetectLabelsJob
             XRay.recorder.capture('detect_labels', segment: segment) do |subsegment|
 
                 job_annotations = { 
-                    image_id: @sneaker.id,
-                    user_name: @sneaker.user.username,
-                    user_id: @sneaker.user.id
+                    image_id: @image.id,
+                    user_name: @image.user.username,
+                    user_id: @image.user.id
                 }
                 subsegment.annotations.update job_annotations
 
                 client = Aws::Rekognition::Client.new
                 resp = client.detect_labels({
-                        image: { bytes: @sneaker.sneaker_image.download }, 
+                        image: { bytes: @image.image_image.download }, 
                         max_labels: 20, 
                         min_confidence: 50,
                 })
 
                 if resp.labels.count == 0 
-                    detection_logger.info("No labels detected for Image: #{sneaker_id}")
+                    detection_logger.info("No labels detected for Image: #{image_id}")
                 end
     
                 resp.labels.each do |label|    
@@ -40,10 +40,10 @@ class DetectLabelsJob
                     @tag.name = label.name
                     @tag.confidence = label.confidence
                     @tag.source = "Rekognition - Detect Labels"
-                    @tag.sneaker = @sneaker
+                    @tag.image = @image
                     @tag.save
     
-                    detection_logger.info("Label detected for Image: #{sneaker_id} Name: #{@tag.name} Confidence: #{@tag.confidence}")
+                    detection_logger.info("Label detected for Image: #{image_id} Name: #{@tag.name} Confidence: #{@tag.confidence}")
     
                 end
 
@@ -58,9 +58,9 @@ class DetectLabelsJob
                 @tag = Tag.new
                 @tag.name = "Error"
                 @tag.source = "Rekognition - Detect Labels"
-                @tag.sneaker = @sneaker
+                @tag.image = @image
                 @tag.save
-                detection_logger.error("Error detecting labels for Image: #{sneaker_id} Details: #{e}")
+                detection_logger.error("Error detecting labels for Image: #{image_id} Details: #{e}")
         end
     end
 

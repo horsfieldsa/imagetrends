@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
   devise_for :users, :controllers => {:registrations => "registrations", :sessions =>"sessions"}
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-  resources :sneakers
+  resources :images
   resources :tags
   resources :favorites, except: [:new, :index, :show, :edit, :update]
 
-  get 'uploaded', to: 'sneakers#uploaded'
+  get 'uploaded', to: 'images#uploaded'
   get 'trends', to: 'trends#index'
-  get '/sneakers/tag/:name', to: 'sneakers#find'
+  get '/images/tag/:name', to: 'images#find'
 
-  root 'sneakers#index'
+  root 'images#index'
 end
