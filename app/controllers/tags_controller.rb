@@ -6,7 +6,7 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.json
   def index
-    @tags_distinct = Tag.group(:name).joins(:image)
+    @tags_distinct = Tag.group(:name)
     tag_logger.info("Loading a list of tags: #{@tags_distinct.count}")
   end
 
