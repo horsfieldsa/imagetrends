@@ -8,14 +8,14 @@ services:
     restart: always
     network_mode: host
     environment:
-      MYSQL_ROOT_PASSWORD: imagetrends
+     - MYSQL_ROOT_PASSWORD=imagetrends
 
   ui:
     image: imagetrends:latest
     restart: always
     network_mode: host
-    #volumes:
-    #  - /opt/imagetrends-logs:/app/log
+    volumes:
+      - /opt/imagetrends-logs:/app/log
     depends_on:
       - db
     environment:
