@@ -1,13 +1,15 @@
-<%= link_to '<i class="fa fa-arrow-left" aria-hidden="true"></i>'.html_safe, :back, :class => "btn btn-outline-secondary" %>
-<%= link_to '<i class="fa fa-download"></i> Download'.html_safe, rails_blob_path(@image.image_image, disposition: "attachment"),
-             :class => "btn btn-outline-secondary pull-right ml-2" %>
-<% if current_user %>
-  <% if @image.user.id == current_user.id %>
-    <%= link_to '<i class="fa fa-trash"></i> Delete'.html_safe, image_path(@image), data: {:confirm => 'Are you sure?'}, :method => :delete, :class => "btn btn-outline-danger pull-right" %>
-  <% end %>
-  
-<% end %>
+<div class="row">
+  <div class="col-12">
+    <%= link_to '<i class="fa fa-download"></i> Download'.html_safe, rails_blob_path(@image.image_image, disposition: "attachment"),
+                :class => "btn btn-outline-secondary pull-right ml-2" %>
+    <% if current_user && @image.user.id == current_user.id %>
+      <%= link_to '<i class="fa fa-trash"></i> Delete'.html_safe, image_path(@image), data: {:confirm => 'Are you sure?'}, :method => :delete, :class => "btn btn-outline-danger pull-right" %>
+    <% end %>
+  </div>
+</div>
+
 <hr/>
+
 <div class="row" id='image'>
   <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
     <figure class="figure">

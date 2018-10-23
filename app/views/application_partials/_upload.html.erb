@@ -1,0 +1,25 @@
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadModalLabel">Upload Image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <%= form_for @new_image do |f| %>
+        <div class="modal-body text-center">
+            <%= image_tag("upload.png", height: 50, width: 10, border: 0, :class => "image_to_upload img-thumbnail") %>
+            <label class="custom-file-upload btn btn-outline-dark">
+              <%= f.file_field :image_image, direct_upload: true, accept: 'image/png,image/gif,image/jpeg' %>
+              Select Image
+            </label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <%= f.button "Share".html_safe, :class => "btn btn-primary", type: :submit, :disabled => true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Uploading ..."} %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

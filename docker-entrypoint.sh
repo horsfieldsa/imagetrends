@@ -4,7 +4,7 @@
 
 cd /app
 rails db:create
-rails db:migrate
+rails db:schema:load
 rails db:seed
 
 exec "$@"

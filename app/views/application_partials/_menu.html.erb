@@ -1,0 +1,71 @@
+<div class="d-none d-xl-block d-lg-block d-md-block">
+    <ul class="nav top-nav nav-pills justify-content-center">
+        <li class="nav-item <%= 'active' if params[:controller] == 'images' && params[:action] == 'index' && !request.query_string.present? %>">
+            <a class="nav-link" href="/"><i class="fa fa-clock-o" aria-hidden="true"></i> Recent</a>
+        </li>
+        <% if user_signed_in? %>
+        <li class="nav-item <%= 'active' if params[:controller] == 'images' && params[:action] == 'index' && request.query_string.present? %>">
+            <%= link_to '<i class="fa fa-upload"></i> My Uploads'.html_safe, images_path(:view => "user"), :class => 'nav-link'%>
+        </li>
+        <% end %>           
+        <li class="nav-item <%= 'active' if params[:controller] == 'tags' && params[:action] == 'index' %>">
+            <a class="nav-link"
+            href="/tags"><i class="fa fa-tags" aria-hidden="true"></i> Tags</a>
+        </li>
+        <li class="nav-item <%= 'active' if params[:controller] == 'trends' && params[:action] == 'index'%>">
+            <a class="nav-link" href="/trends"><i class="fa fa-line-chart" aria-hidden="true"></i> Trends</a>
+        </li>
+        <% if devise_controller? %>
+        <li class="nav-item active">
+            <a class="nav-link" href="#"><i class="fa fa-user" aria-hidden="true"></i> User</a>
+        </li>
+        <% end %>
+        <% if params[:controller] == 'images' && params[:action] == 'show' %>
+            <li class="nav-item active">
+                <a class="nav-link" href="#"><i class="fa fa-image" aria-hidden="true"></i> Image</a>
+            </li>
+        <% end %>
+        <% if params[:controller] == 'images' && params[:action] == 'find' %>
+            <li class="nav-item active">
+                <a class="nav-link" href="#"><i class="fa fa-search" aria-hidden="true"></i> Find</a>
+            </li>
+        <% end %>        
+    </ul>
+</div>
+
+<div class="d-xl-none d-lg-none d-md-none">
+    <ul class="nav top-nav nav-pills justify-content-center hidden-sm-up">
+        <li class="nav-item <%= 'active' if params[:controller] == 'images' && params[:action] == 'index' && !request.query_string.present?%>">
+            <a class="nav-link"
+            href="/"><i class="fa fa-clock-o" aria-hidden="true"></i></a>
+        </li>
+        <% if user_signed_in? %>
+        <li class="nav-item <%= 'active' if params[:controller] == 'images' && params[:action] == 'index' && request.query_string.present? %>">
+            <%= link_to '<i class="fa fa-upload"></i>'.html_safe, images_path(:view => "user"), :class => 'nav-link'%>
+        </li>
+        <% end %>            
+        <li class="nav-item <%= 'active' if params[:controller] == 'tags' && params[:action] == 'index'%>">
+            <a class="nav-link" href="/tags"><i class="fa fa-tags" aria-hidden="true"></i></a>
+        </li>
+        <li class="nav-item <%= 'active' if params[:controller] == 'trends' && params[:action] == 'index'%>">
+            <a class="nav-link"
+            href="/trends"><i class="fa fa-line-chart" aria-hidden="true"></i></a>
+        </li>
+        <% if devise_controller? %>
+        <li class="nav-item active">
+            <a class="nav-link"
+            href="#"><i class="fa fa-user" aria-hidden="true"></i></a>
+        </li>
+        <% end %> 
+        <% if params[:controller] == 'images' && params[:action] == 'show' %>
+            <li class="nav-item active">
+                <a class="nav-link" href="#"><i class="fa fa-image" aria-hidden="true"></i></a>
+            </li>
+        <% end %>  
+        <% if params[:controller] == 'images' && params[:action] == 'find' %>
+            <li class="nav-item active">
+                <a class="nav-link" href="#"><i class="fa fa-search" aria-hidden="true"></i></a>
+            </li>
+        <% end %>                 
+    </ul>
+</div>

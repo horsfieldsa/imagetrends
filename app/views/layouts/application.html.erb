@@ -18,172 +18,35 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-light navbar-expand-md fixed-top" style="background-color: #ffffff;">
-      <%= link_to "<span>#{image_tag("logo.png", height: 45, border: 0)}</span>".html_safe, root_path, class: "navbar-brand" %>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-        <div class="collapse navbar-collapse" id="main-navbar">
-          <ul class="navbar-nav ml-auto">
-              <% if !user_signed_in? %>
-                <li class="nav-item"><%= link_to '<i class="fa fa-camera-retro" aria-hidden="true"></i> Share'.html_safe, new_user_session_path,
-                    :class => "btn btn-outline-dark my-2 my-sm-0"%>
-                </li>
-                &nbsp;              
-                <li class="nav-item"><%= link_to '<i class="fa fa-user" aria-hidden="true"></i> Login'.html_safe, new_user_session_path,
-                    :class => "btn btn-primary my-2 my-sm-0" %>
-                </li>
-              <% else %>
-                <li class="nav-item"><%= link_to '<i class="fa fa-camera-retro" aria-hidden="true"></i> Upload'.html_safe, new_user_session_path,
-                    :class => "btn btn-outline-dark my-2 my-sm-0",'data-toggle' => 'modal', 'data-target' => '#uploadModal' %>
-                &nbsp;     
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#"" id="user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="fa fa-user" aria-hidden="true"></i></a>
-                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-dropdown">
-                    <%= link_to "My Profile".html_safe, edit_user_registration_path, :class => "dropdown-item" %>
-                    <% if current_user.admin? %>
-                      <%= link_to "Admin".html_safe, rails_admin_path, :class => "dropdown-item" %>
-                    <% end %>
-                    <%= link_to "Logout".html_safe, destroy_user_session_path, :class => "dropdown-item" , method: :delete %>
-                  </div>
-                </li>  
-              <% end %>
-          </ul>
-        </div>
-    </nav>
+
+    <!-- Navigation -->
+    <%= render 'application_partials/navigation' %>
 
     <div class="container">
-       <% if flash[:notice] %>
-          <div class="alert alert-success border-success text-success" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            <i class="fa fa-thumbs-up"></i> <%= flash[:notice] %>
-          </div>
-       <% end %>
 
-       <% if flash[:alert] %>
-         <div class="alert alert-danger border-danger text-danger" role="alert">
-           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-             <span aria-hidden="true">&times;</span>
-           </button>
-           <i class="fa fa-thumbs-down"></i> <%= flash[:alert] %>
-         </div>
-       <% end %>
+      <!-- Flash Alerts -->
+      <%= render 'application_partials/flash' %>
 
-       <div class="d-none d-xl-block d-lg-block d-md-block">
-         <ul class="nav top-nav nav-pills justify-content-center">
-           <li class="nav-item <%= 'active' if params[:controller] == 'images' && params[:action] == 'index' && !request.query_string.present? %>
-                               <%= 'active' if params[:controller] == 'images' && params[:action] == 'show' && !request.query_string.present? %>">
-             <a class="nav-link"
-                href="/"><i class="fa fa-clock-o" aria-hidden="true"></i> Recent</a>
-           </li>
-           <% if user_signed_in? %>
-            <li class="nav-item <%= 'active' if params[:controller] == 'images' && params[:action] == 'index' && request.query_string.present? %>">
-              <%= link_to '<i class="fa fa-upload"></i> My Uploads'.html_safe, images_path(:view => "user"), :class => 'nav-link'%>
-            </li>
-           <% end %>           
-           <li class="nav-item <%= 'active' if params[:controller] == 'tags' && params[:action] == 'index' %>
-                               <%= 'active' if params[:controller] == 'images' && params[:action] == 'find' %>">
-             <a class="nav-link"
-              href="/tags"><i class="fa fa-tags" aria-hidden="true"></i> Tags</a>
-           </li>
-           <li class="nav-item <%= 'active' if params[:controller] == 'trends' && params[:action] == 'index'%>">
-             <a class="nav-link"
-              href="/trends"><i class="fa fa-line-chart" aria-hidden="true"></i> Trends</a>
-           </li>
-           <% if devise_controller? %>
-            <li class="nav-item active">
-              <a class="nav-link"
-                href="#"><i class="fa fa-user" aria-hidden="true"></i> User</a>
-            </li>
-           <% end %>
-         </ul>
-       </div>
+      <!-- Upload Modal -->
+      <%= render 'application_partials/menu' %>
 
-       <div class="d-xl-none d-lg-none d-md-none">
-         <ul class="nav top-nav nav-pills justify-content-center hidden-sm-up">
-           <li class="nav-item <%= 'active' if params[:controller] == 'images' && params[:action] == 'index' && !request.query_string.present?%>">
-             <a class="nav-link"
-              href="/"><i class="fa fa-clock-o" aria-hidden="true"></i></a>
-           </li>
-           <% if user_signed_in? %>
-            <li class="nav-item <%= 'active' if params[:controller] == 'images' && params[:action] == 'index' && request.query_string.present? %>">
-              <%= link_to '<i class="fa fa-upload"></i>'.html_safe, images_path(:view => "user"), :class => 'nav-link'%>
-            </li>
-           <% end %>            
-           <li class="nav-item <%= 'active' if params[:controller] == 'tags' && params[:action] == 'index'%>
-                               <%= 'active' if params[:controller] == 'images' && params[:action] == 'find'%>">
-             <a class="nav-link" href="/tags"><i class="fa fa-tags" aria-hidden="true"></i></a>
-           </li>
-           <li class="nav-item <%= 'active' if params[:controller] == 'trends' && params[:action] == 'index'%>">
-             <a class="nav-link"
-              href="/trends"><i class="fa fa-line-chart" aria-hidden="true"></i></a>
-           </li>
-           <% if devise_controller? %>
-            <li class="nav-item active">
-              <a class="nav-link"
-                href="#"><i class="fa fa-user" aria-hidden="true"></i></a>
-            </li>
-           <% end %>           
-         </ul>
-       </div>
-
+      <!-- Search -->
       <% if false %>
-       <div class="container">
-          <form class="navbar-form navbar-left" action="#">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search" name="search">
-              <div class="input-group-btn">
-                &nbsp;
-                <button class="btn btn-outline-secondary" type="submit">
-                  <i class="fa fa-search"></i>
-                </button>
-              </div>
-            </div>
-          </form>
-       </div>
+        <%= render 'application_partials/search' %>
        <% end %>
 
       <hr/>
+
+      <!-- Content  -->
       <%= yield %>
 
     </div>
 
     <!-- Upload Modal -->
-    <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="uploadModalLabel">Upload Image</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <%= form_for @new_image do |f| %>
-            <div class="modal-body text-center">
-                <%= image_tag("upload.png", height: 50, width: 10, border: 0, :class => "image_to_upload img-thumbnail") %>
-                <label class="custom-file-upload btn btn-outline-dark">
-                  <%= f.file_field :image_image, direct_upload: true, accept: 'image/png,image/gif,image/jpeg' %>
-                  Select Image
-                </label>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <%= f.button "Share".html_safe, :class => "btn btn-primary", type: :submit, :disabled => true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Uploading ..."} %>
-            </div>
-         <% end %>
-        </div>
-      </div>
-    </div>
+    <%= render 'application_partials/upload' %>
 
-    <footer class="footer">
-      <div class="container">
-        <hr/>
-        <span class="text-muted">Created in Oregon and Hosted on AWS</span>
-      </div>
-    </footer>
-
+    <!-- Footer -->
+    <%= render 'application_partials/footer' %>
+  
   </body>
 </html>
