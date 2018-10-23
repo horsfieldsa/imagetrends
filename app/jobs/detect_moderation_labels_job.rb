@@ -42,7 +42,6 @@ class DetectModerationLabelsJob
                     @tag.save
 
                     if label.name == 'Suggestive' && label.confidence > 80
-                        @image.approved = false
                         @image.save
                         detection_logger.warn("Inappropriate content detected, unapproving image #{image_id}: #{@tag.name}")
                     end

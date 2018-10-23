@@ -78,8 +78,7 @@
             </li>
            <% end %>           
            <li class="nav-item <%= 'active' if params[:controller] == 'tags' && params[:action] == 'index' %>
-                               <%= 'active' if params[:controller] == 'images' && params[:action] == 'find' %>
-                               <%= 'active' if params[:controller] == 'images' && params[:action] == 'unapproved' %>">
+                               <%= 'active' if params[:controller] == 'images' && params[:action] == 'find' %>">
              <a class="nav-link"
               href="/tags"><i class="fa fa-tags" aria-hidden="true"></i> Tags</a>
            </li>
@@ -108,10 +107,8 @@
             </li>
            <% end %>            
            <li class="nav-item <%= 'active' if params[:controller] == 'tags' && params[:action] == 'index'%>
-                               <%= 'active' if params[:controller] == 'images' && params[:action] == 'find'%>
-                               <%= 'active' if params[:controller] == 'images' && params[:action] == 'unapproved'%>">
-             <a class="nav-link"
-              href="/tags"><i class="fa fa-tags" aria-hidden="true"></i></a>
+                               <%= 'active' if params[:controller] == 'images' && params[:action] == 'find'%>">
+             <a class="nav-link" href="/tags"><i class="fa fa-tags" aria-hidden="true"></i></a>
            </li>
            <li class="nav-item <%= 'active' if params[:controller] == 'trends' && params[:action] == 'index'%>">
              <a class="nav-link"

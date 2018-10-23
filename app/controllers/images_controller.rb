@@ -24,7 +24,7 @@ class ImagesController < ApplicationController
       end
     else
       image_logger.info("Loading all images for User: #{!current_user.nil? ? current_user.username : 'No User'} Page: #{!params[:page].nil? ? params[:page] : '1'}")
-      @images = Image.where(approved: true).order(created_at: :desc).paginate(page: params[:page])
+      @images = Image.order(created_at: :desc).paginate(page: params[:page])
       respond_to do |format|
       format.html
       format.js
@@ -49,7 +49,7 @@ class ImagesController < ApplicationController
 
   def find
     image_logger.info("Loading images with Tag: #{params[:name]}")
-    @images = Image.joins(:tags).where(approved: true).where(tags: {name: params[:name]}).paginate(:page => params[:page])
+    @images = Image.joins(:tags).where(tags: {name: params[:name]}).paginate(:page => params[:page])
     respond_to do |format|
      format.html
      format.js
@@ -60,7 +60,6 @@ class ImagesController < ApplicationController
   # POST /images.json
   def create
     @image = current_user.images.new(image_params)
-    @image.approved = true
     image_logger.info("Image uploaded started: #{current_user.username}")
 
     respond_to do |format|

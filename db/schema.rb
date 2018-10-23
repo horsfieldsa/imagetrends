@@ -44,7 +44,6 @@ ActiveRecord::Schema.define(version: 2018_10_15_231645) do
     t.string "image_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "approved"
     t.integer "user_id"
   end
 

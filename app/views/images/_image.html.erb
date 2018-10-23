@@ -43,7 +43,6 @@
               </tr>
               <tr>
                 <td>
-                 <% if image.approved == false %><span class="badge badge-danger">Unapproved</span><% end %>
                   <% if image.tags.count > 0 %>
                     <% image.tags.each do |tag| %>
                       <% if tag.source == "Rekognition - Detect Labels"%>
