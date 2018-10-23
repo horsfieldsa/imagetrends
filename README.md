@@ -15,6 +15,8 @@ If you want to create your own AMI you can use/modify /scripts/crate_base_instan
 
 ## Overview 
 
+![Alt text](documentation/imagetrends.png?raw=true "ImageTrends Screenshot")
+
 The application is a simple Ruby on Rails (5.2) application with a MySql (8) database. The application runs as two docker containers, one for the application (ui) and one for the database (db). You can control the deployment of these containers by modifying docker-compose.yaml.
 
 The application simulates an image asset management application. Authenticated users can uploaded images (stored as blobs in the database). Once images are uploaded, background jobs (using suckerpunch) are started to analyze and collect metadata about the images. Four of these jobs use AWS Rekognition to detect labels, moderation labels, text, and celebrities. One of thes jobs reads EXIF (if avaiable) metadata to determine the camera model used to take the image.
@@ -58,6 +60,12 @@ The application and database containers write log files to mounted volumes in th
   * xray.log
 * Database: /opt/imagetrends-logs/db
   * NOT YET IMPLEMENTED
+
+## AWS X-Ray Support
+
+The application uses AWS X-Ray (via: https://github.com/aws/aws-xray-sdk-ruby) to record and monitor all HTTP, SDK and Database calls. After the application has received some traffic you should see a service map as shown below in the region where the application is hosted. 
+
+![Alt text](documentation/xray.png?raw=true "AWS X-Ray Screenshot")
 
 ## Limitations
 
