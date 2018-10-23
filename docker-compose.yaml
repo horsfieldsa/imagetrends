@@ -7,6 +7,8 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     network_mode: host
+    volumes:
+      - /opt/imagetrends-logs/db:/var/log/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=imagetrends
       - MYSQL_ROOT_HOST=127.0.0.1
@@ -21,7 +23,7 @@ services:
     restart: always
     network_mode: host
     volumes:
-      - /opt/imagetrends-logs:/app/log
+      - /opt/imagetrends-logs/ui:/app/log
     depends_on:
       - db
     environment:
