@@ -5,7 +5,9 @@ class Sneaker < ApplicationRecord
   has_one_attached :sneaker_image
   belongs_to :user
 
-  after_create_commit :detect_labels, :log_creation
+  after_create_commit :detect_labels, :log_create
+  after_update_commit :log_update
+  after_destroy_commit :log_destroy
 
   # Pagination Items Per Page
   self.per_page = 20
@@ -21,8 +23,16 @@ class Sneaker < ApplicationRecord
 
   private
 
-  def log_creation
+  def log_create
     sneaker_logger.info("Image created: User: #{self.user.username} Image: #{self.id} ")
+  end
+
+  def log_update
+    sneaker_logger.info("Image updated: User: #{self.user.username} Image: #{self.id} ")
+  end
+
+  def log_destroy
+    sneaker_logger.info("Image deleted: User: #{self.user.username} Image: #{self.id} ")
   end
 
   def sneaker_logger

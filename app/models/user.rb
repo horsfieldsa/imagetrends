@@ -1,6 +1,4 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
@@ -11,7 +9,9 @@ class User < ApplicationRecord
   validates_uniqueness_of :email, :username
   validates_length_of :username, :maximum => 20
 
-  after_create_commit :log_creation
+  after_create_commit :log_create
+  after_update_commit :log_update
+  after_destroy_commit :log_destroy
 
   def admin?
     if self.role == "admin" # If you have id == 0 for admin
@@ -25,8 +25,16 @@ class User < ApplicationRecord
 
   private
 
-  def log_creation
+  def log_create
     user_logger.info("User created: #{self.username}")
+  end
+
+  def log_update
+    user_logger.info("User updated: #{self.username}")
+  end
+
+  def log_destroy
+    user_logger.info("User deleted: #{self.username}")
   end
 
   def user_logger

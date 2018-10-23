@@ -8,6 +8,11 @@ class ApplicationController < ActionController::Base
     application_logger.warn("Access Denied - Action: #{params[:action]} Controller: #{params[:controller]} Event: #{exception.message}")
   end
 
+  rescue_from ActiveRecord::RecordNotFound do |exception|
+    redirect_to main_app.root_url, :alert => "Sorry, we could not find what you are looking for."
+    application_logger.warn("Record Not Found - Action: #{params[:action]} Controller: #{params[:controller]} Event: #{exception.message}")
+  end
+
   private
 
   def create_sneaker
