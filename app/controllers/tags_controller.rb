@@ -6,8 +6,8 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.json
   def index
-    @tags_distinct = Tag.group(:name)
-    tag_logger.info("Loading a list of tags: #{@tags_distinct.count}")
+    @tags_distinct = Tag.select("name, source").group("name, source")
+    tag_logger.info("Loading a list of distinct Tags: #{@tags_distinct.length}")
   end
 
   private

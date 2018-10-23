@@ -23,5 +23,3 @@ production:
   port: <%= ENV['DB_PORT'] %>
   pool: 200
   timeout: 10000
-  settings:
-    sql_mode: traditional
