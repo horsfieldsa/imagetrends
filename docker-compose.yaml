@@ -8,7 +8,13 @@ services:
     restart: always
     network_mode: host
     environment:
-     - MYSQL_ROOT_PASSWORD=imagetrends
+      - MYSQL_ROOT_PASSWORD=imagetrends
+      - MYSQL_ROOT_HOST=127.0.0.1
+      - MYSQL_DATABASE=imagetrends
+      - MYSQL_USER=imagetrends
+      - MYSQL_PASSWORD=imagetrends
+    security_opt:
+      - seccomp:unconfined
 
   ui:
     image: imagetrends:latest
@@ -20,9 +26,10 @@ services:
       - db
     environment:
       DB_NAME: imagetrends
-      DB_USER: root
+      DB_USER: imagetrends
       DB_PASS: imagetrends
       DB_HOST: 127.0.0.1
       DB_PORT: 3306
       RAILS_ENV: production
       RAILS_MASTER_KEY: cdf56d76316a62b4532137d4fbb7b1b5
+      WAIT_HOSTS: 127.0.0.1:3306
