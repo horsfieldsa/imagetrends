@@ -7,8 +7,17 @@ as possible, while demonstrating capabilities in real-world-like use-cases.
 
 ## Disclaimer
 
-This sample appliation is configured to deploy the application on an EC2 instance as a hosted docker container in Rails Development mode. This is not the way you would want to host this application in production. The application is served by Puma and uses a SQL Lite database. It's fairly fragile,
-barely supports concurrency, but because of this is great at generating errors for testing monitoring and for use in simple demonstrations.
+This sample application is intentionally hosted on a single EC2 instance for demonstration purposes only. The application could be modified to be deployed on ECS, EKS, or your platform of choice using the docker-compose.yaml file as an example of the information you'd need to pass to the appliation container to connect to an external database. You can also run it as a single-instance docker container using a SQL lite database by omitting the RAILS_ENV environment variable (which will force rails to default to development mode).
+
+The template.yaml CloudFormation template depends on a public AMI with some dependencies installed. This is to speed up deployment during workhops and demos.
+
+If you want to create your own AMI you can use/modify /scripts/crate_base_instance_for_ami.yaml as needed. This template installs all dependencies, and builds the docker container via user-data (again, for demonstration purposes only).
+
+## Overview 
+
+The application is a simple Ruby on Rails (5.2) application with a MySql (8) database. The application runs as two docker containers, one for the application (ui) and one for the database (db). You can control the deployment of these containers by modifying docker-compose.yaml.
+
+The application simulates an image asset management application. Authenticated users can uploaded images (stored as blobs in the database). Once images are uploaded, background jobs (using suckerpunch) are started to analyze and collect metadata about the images. Four of these jobs use AWS Rekognition to detect labels, moderation labels, text, and celebrities. One of thes jobs reads EXIF (if avaiable) metadata to determine the camera model used to take the image.
 
 ## Deployment
 
@@ -18,6 +27,7 @@ The sample application is deployed via a CloudFormation template (template.yaml)
 2. Instance Size - Choose an Instance Size (Be Frugal)
 3. SSH Key - Chose or Create an SSH Key (Used to SSH into Instance)
 4. SSHLocation - Your Current Location (Input IP Address or Range to Allow SSH From)
+5. HTTPLocation - Your Current Location (Input IP Address or Range to Allow HTTP From)
 
 The CloudFormation template will deploy the following resources into your account.
 
@@ -37,6 +47,17 @@ You can launch the sample application stack through this button:
 WARNING: Make sure you deploy it to a supported region (See Below)
 
 [![Launch Stack](https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=ImageTrendsSampleApp&templateURL=https://s3-us-west-2.amazonaws.com/imagetrends-sample-application/template.yaml)
+
+## Log Files
+
+The application and database containers write log files to mounted volumes in the following locations:
+
+* Application: /opt/imagetrends-logs/ui
+  * application.log
+  * production.log
+  * xray.log
+* Database: /opt/imagetrends-logs/db
+  * NOT YET IMPLEMENTED
 
 ## Limitations
 
