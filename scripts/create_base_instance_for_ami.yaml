@@ -120,8 +120,8 @@ Resources:
             # Run application
             REGION=`curl http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
             iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 3000
-            #docker run -d --label=imagetrends -it -v /opt/imagetrends-logs:/app/log -e "AWS_REGION=${REGION}" --network=host --restart=unless-stopped imagetrends:latest
-            docker-compose -f /opt/imagetrends.yaml up
+            docker run -d --label=imagetrends -it -v /opt/imagetrends-logs:/app/log -e "AWS_REGION=${REGION}" --network=host --restart=unless-stopped imagetrends:latest
+            #docker-compose -f /opt/imagetrends.yaml up
 
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
