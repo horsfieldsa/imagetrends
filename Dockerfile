@@ -2,7 +2,7 @@ FROM ruby:2.5.1
 
 LABEL maintainer="Scott Horsfield <shhorsfi@amazon.com>"
 
-#RUN apt-get update && apt-get install -y graphicsmagick
+RUN apt-get update && apt-get install -y graphicsmagick
 
 RUN mkdir /app
 WORKDIR /app

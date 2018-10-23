@@ -13,7 +13,7 @@ services:
   ui:
     image: imagetrends:latest
     restart: always
-    #network_mode: host
+    network_mode: host
     #volumes:
     #  - /opt/imagetrends-logs:/app/log
     depends_on:
