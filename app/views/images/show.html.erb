@@ -1,9 +1,16 @@
 <div class="row">
   <div class="col-12">
-    <%= link_to '<i class="fa fa-download"></i> Download'.html_safe, rails_blob_path(@image.image_image, disposition: "attachment"),
+
+    <span class="fa-stack fa-lg">
+      <i class="fa fa-circle fa-stack-2x"></i>
+      <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+    </span>
+      <%= @image.user.username %>
+
+    <%= link_to '<i class="fa fa-download"></i>'.html_safe, rails_blob_path(@image.image_image, disposition: "attachment"),
                 :class => "btn btn-outline-secondary pull-right ml-2" %>
     <% if current_user && @image.user.id == current_user.id %>
-      <%= link_to '<i class="fa fa-trash"></i> Delete'.html_safe, image_path(@image), data: {:confirm => 'Are you sure?'}, :method => :delete, :class => "btn btn-outline-danger pull-right" %>
+      <%= link_to '<i class="fa fa-trash"></i>'.html_safe, image_path(@image), data: {:confirm => 'Are you sure?'}, :method => :delete, :class => "btn btn-outline-danger pull-right" %>
     <% end %>
   </div>
 </div>
@@ -42,10 +49,6 @@
            <% if @image.tags.count > 0 %>
             <% @image.tags.each do |tag| %>
 
-              <% if tag.name == "Error" %>
-                <%= link_to tag.name, "/images/tag/#{tag.name}", :title => "#{tag.source}", :class => "badge badge-danger" %>
-              <% else %>
-
                 <% if tag.source == "Rekognition - Detect Labels"%>
                   <%= link_to tag.name, "/images/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-secondary" %>
                 <% end %>
@@ -61,7 +64,7 @@
                 <% if tag.source == "Extract EXIF Data"%>
                   <%= link_to tag.name, "/images/tag/#{tag.name}", :title => "#{tag.name}", :class => "badge badge-dark" %>
                 <% end %> 
-              <% end %>                                                            
+                                     
             <% end %>
           <% else %>
             <span class="badge badge-secondary">No Tags</span>

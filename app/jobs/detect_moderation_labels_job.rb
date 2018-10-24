@@ -57,7 +57,7 @@ class DetectModerationLabelsJob
             rescue StandardError => e
                 puts(e)
                 @tag = Tag.new
-                @tag.name = "Error"
+                @tag.name = "Error - Detect Moderation Labels"
                 @tag.source = "Rekognition - Detect Moderation Labels"
                 @tag.image = @image
                 @tag.save

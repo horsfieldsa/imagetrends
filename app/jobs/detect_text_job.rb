@@ -54,7 +54,7 @@ class DetectTextJob
             rescue StandardError => e
                 puts(e)
                 @tag = Tag.new
-                @tag.name = "Error"
+                @tag.name = "Error - Detect Text"
                 @tag.source = "Rekognition - Detect Text"
                 @tag.image = @image
                 @tag.save

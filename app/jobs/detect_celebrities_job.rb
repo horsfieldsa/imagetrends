@@ -52,7 +52,7 @@ class DetectCelebritiesJob
             rescue StandardError => e
                 puts(e)
                 @tag = Tag.new
-                @tag.name = "Error"
+                @tag.name = "Error - Recognize Celebrities"
                 @tag.source = "Rekognition - Recognize Celebrities"
                 @tag.image = @image
                 @tag.save

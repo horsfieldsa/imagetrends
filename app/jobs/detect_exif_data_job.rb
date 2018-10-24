@@ -37,7 +37,7 @@ class DetectExifDataJob
             rescue StandardError => e
                 puts(e)
                 @tag = Tag.new
-                @tag.name = "Error"
+                @tag.name = "Error - Extract EXIF Data"
                 @tag.source = "Extract EXIF Data"
                 @tag.image = @image
                 @tag.save

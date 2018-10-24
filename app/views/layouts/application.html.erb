@@ -27,7 +27,7 @@
       <!-- Flash Alerts -->
       <%= render 'application_partials/flash' %>
 
-      <!-- Upload Modal -->
+      <!-- Menu -->
       <%= render 'application_partials/menu' %>
 
       <!-- Search -->
@@ -36,6 +36,22 @@
        <% end %>
 
       <hr/>
+
+      <!-- Unauthenticated User CTA -->
+      <% if !user_signed_in? && params[:controller] == 'images' && params[:action] == 'index' %>  
+          <section class="jumbotron text-center">
+              <div class="container">
+                  <h3 class="jumbotron-heading">Hello, Welcome to IMAGETRENDS</h3>
+                  <p class="lead text-muted">This is a sample application used for learning Amazon Web Services. This application will analyze the images you upload using Amazon Rekognition and tag them based on the detected content. Upload an image to get started!</p>
+                  <p>
+                    <%= link_to '<i class="fa fa-user" aria-hidden="true"></i> Sign In'.html_safe, new_user_session_path, 
+                        :class => "btn btn-primary"%>
+                    <%= link_to '<i class="fa fa-user-plus" aria-hidden="true"></i> Sign Up '.html_safe, new_user_registration_path, 
+                        :class => "btn btn-info"%>      
+                  </p>
+              </div>
+          </section>
+      <% end %>
 
       <!-- Content  -->
       <%= yield %>

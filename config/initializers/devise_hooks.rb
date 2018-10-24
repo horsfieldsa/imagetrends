@@ -1,6 +1,10 @@
 Warden::Manager.before_failure do |env, opts|
-    email = env["action_dispatch.request.request_parameters"][:user][:email]
-    warden_logger.warn("Failed login attempt: #{email} ")
+    if env["action_dispatch.request.request_parameters"][:user]
+      email = env["action_dispatch.request.request_parameters"][:user][:email]
+      warden_logger.warn("Failed login attempt: #{email} ")
+    else
+      warden_logger.warn("Unauthorized Access Attempted: Redirecting to Logon")
+    end
 end
 
 Warden::Manager.after_authentication do |user,auth,opts|

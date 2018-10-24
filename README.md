@@ -13,7 +13,7 @@ The template.yaml CloudFormation template depends on a public AMI with some depe
 
 If you want to create your own AMI you can use/modify /scripts/create_base_instance_for_ami.yaml as needed. This template installs all dependencies, and builds the docker container via user-data (again, for demonstration purposes only).
 
-## Overview 
+## Overview
 
 ![Alt text](documentation/imagetrends.png?raw=true "ImageTrends Screenshot")
 
@@ -52,7 +52,6 @@ WARNING: Make sure you deploy it to a supported region (See Below)
 
 [![Launch Stack](https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=ImageTrendsSampleApp&templateURL=https://s3-us-west-2.amazonaws.com/imagetrends-sample-application/template.yaml)
 
-
 ## Log Files
 
 The application and database containers write log files to mounted volumes in the following locations:
@@ -70,6 +69,54 @@ The application uses AWS X-Ray (via: https://github.com/aws/aws-xray-sdk-ruby) t
 
 ![Alt text](documentation/xray.png?raw=true "AWS X-Ray Screenshot")
 
+## Generating Errors
+
+For a demo application like Imagetrends, it's useful to leave some "bugs" in the system for testing various failure scenarios and responses. This is especially useful for monitoring demonstrations and recovery examples. Below are some actions that will cause application failures, as well as how to recover from these failures.
+
+### ERROR: Image Larger than 5 MB
+
+#### Generate
+
+Upload an image larger than 5MB, some example images that generate these errors are included in the sample images archive referenced in the Sample Images section below.
+
+#### Error
+
+Logged In: application.log
+
+```
+E, [2018-10-24T12:42:28.861486 #3374] ERROR -- : Error detecting text for Image: 8 Details: 1 validation error detected: Value 'java.nio.HeapByteBuffer[pos=0 lim=7843602 cap=7843602]' at 'image.bytes' failed to satisfy constraint: Member must have length less than or equal to 5242880
+```
+
+#### Recovery
+
+The application will recover from this error automatically, you will see tags named "Error" associated with the image for each analysis source that encountered an error.
+
+### ERROR: Image Invalid File Type or Corrupt File
+
+#### Generate
+
+Upload the break_app.jpg image located in the Sample Images archive referenced in the Sample Images section below.
+
+Logged In application.log
+
+#### Error
+
+```
+E, [2018-10-24T12:14:23.618509 #3374]  ERROR -- : Unknown Error - Action: show Controller: images Event: ActiveStorage::InvariableError
+```
+```
+E, [2018-10-24T12:14:26.941977 #3374] ERROR -- : Error detecting moderation labels for Image: 6 Details: Protocol wrong type for socket
+```
+```
+E, [2018-10-24T12:14:34.302484 #3374] ERROR -- : Error detecting text for Image: 6 Details: Broken pipe
+```
+
+#### Recovery
+1. Logon as an administrator (l: admin@admin.com p: Password123). You may need to access the Logon path directly at /users/sign_in
+2. Open the Administration application. You may need to access the Administration application directly at /admin.
+3. Delete the last image you uploaded. (Look for several Error tags)
+
+
 ## Limitations
 
 ### Supported Regions
@@ -84,7 +131,7 @@ The application uses AWS X-Ray (via: https://github.com/aws/aws-xray-sdk-ruby) t
 * ap-northeast-1 (Tokyo)
 * ap-southeast-2 (Sydney)
 
-## Sample Photos
+## Sample Images
 
 You can download some sample photos to use with the application here: 	https://s3-us-west-2.amazonaws.com/imagetrends-sample-application/sample-photos.zip
 

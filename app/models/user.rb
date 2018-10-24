@@ -15,10 +15,10 @@ class User < ApplicationRecord
 
   def admin?
     if self.role == "admin" # If you have id == 0 for admin
-      user_logger.info("User has admin role: #{self.username}")
+      #user_logger.info("User has admin role: #{self.username}")
       true
     else
-      user_logger.warn("User does not have admin role: #{self.username}")
+      #user_logger.warn("User does not have admin role: #{self.username}")
       false
     end
   end

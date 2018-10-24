@@ -13,6 +13,11 @@ class ApplicationController < ActionController::Base
     application_logger.warn("Record Not Found - Action: #{params[:action]} Controller: #{params[:controller]} Event: #{exception.message}")
   end
 
+  rescue_from StandardError do |exception|
+    redirect_to main_app.root_url, :alert => "An unknown error occured."
+    application_logger.error("Unknown Error - Action: #{params[:action]} Controller: #{params[:controller]} Event: #{exception.message}")
+  end
+
   private
 
   def create_image

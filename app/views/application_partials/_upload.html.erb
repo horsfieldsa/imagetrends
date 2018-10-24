@@ -9,15 +9,27 @@
       </div>
       <%= form_for @new_image do |f| %>
         <div class="modal-body text-center">
-            <%= image_tag("upload.png", height: 50, width: 10, border: 0, :class => "image_to_upload img-thumbnail") %>
-            <label class="custom-file-upload btn btn-outline-dark">
-              <%= f.file_field :image_image, direct_upload: true, accept: 'image/png,image/gif,image/jpeg' %>
-              Select Image
-            </label>
+          <div class="row">
+            <div class="col">
+              <%= image_tag("upload.png", height: 100, width: 10, border: 0, :class => "image_to_upload img-thumbnail") %>
+            </div>
+            <div class="col">
+              <h6>
+              Select an Image to Upload
+              </h6>
+              <p>
+              The following extensions are supported: (.jpg)
+              </p>
+              <label class="custom-file-upload btn btn-dark btn-block">
+                <%= f.file_field :image_image, direct_upload: true, accept: 'image/png,image/gif,image/jpeg' %>
+                Select Image
+              </label>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <%= f.button "Share".html_safe, :class => "btn btn-primary", type: :submit, :disabled => true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Uploading ..."} %>
+          <%= f.button "Upload".html_safe, :class => "btn btn-primary", type: :submit, :disabled => true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Uploading ..."} %>
         </div>
       <% end %>
     </div>
