@@ -48,7 +48,7 @@ Mappings:
       Arch: HVM64
   AWSRegionArch2AMI:
     us-west-2:
-      HVM64: ami-0e5e87102c514fea1
+      HVM64: ami-0a822544f4ba8ac3d
 
 Resources:
 
@@ -96,18 +96,23 @@ Resources:
           - AWSInstanceType2Arch
           - Ref: InstanceType
           - Arch
-      UserData: !Base64 |
+      UserData:
+        'Fn::Base64': !Sub |
             #!/bin/bash -xe
             # Start docker
             service docker start
-            # Get current region
-            REGION=`curl http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
             # Start x-ray daemon
-            nohup /usr/bin/xray -o -n ${REGION} &
+            nohup /usr/bin/xray -o -n ${AWS::Region} &
             # Run application
             iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 3000
             docker-compose -f /opt/imagetrends.yaml up -d  
-            
+            # Signal Completion
+            /opt/aws/bin/cfn-signal -e 0 --region ${AWS::Region} --stack ${AWS::StackName} --resource EC2Instance
+    CreationPolicy:
+      ResourceSignal:
+        Count: 1
+        Timeout: PT5M         
+
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:

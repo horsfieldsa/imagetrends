@@ -8,6 +8,7 @@ class DetectExifDataJob
             detection_logger.info("Attempting to detect EXIF data for Image: #{image_id}")
             @image = Image.find(image_id)
 
+            # TODO: Better handling of base url.
             file = "http://localhost:3000" + Rails.application.routes.url_helpers.rails_blob_path(@image.image_image, only_path: true)
 
             download = open(file)
@@ -34,7 +35,6 @@ class DetectExifDataJob
             end
 
             rescue StandardError => e
-                puts("--------------------------------- [ERROR] ---------------------------------")
                 puts(e)
                 @tag = Tag.new
                 @tag.name = "Error"

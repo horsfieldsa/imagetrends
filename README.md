@@ -11,7 +11,7 @@ This sample application is intentionally hosted on a single EC2 instance for dem
 
 The template.yaml CloudFormation template depends on a public AMI with some dependencies installed. This is to speed up deployment during workhops and demos.
 
-If you want to create your own AMI you can use/modify /scripts/crate_base_instance_for_ami.yaml as needed. This template installs all dependencies, and builds the docker container via user-data (again, for demonstration purposes only).
+If you want to create your own AMI you can use/modify /scripts/create_base_instance_for_ami.yaml as needed. This template installs all dependencies, and builds the docker container via user-data (again, for demonstration purposes only).
 
 ## Overview 
 
@@ -22,6 +22,8 @@ The application is a simple Ruby on Rails (5.2) application with a MySql (8) dat
 The application simulates an image asset management application. Authenticated users can uploaded images (stored as blobs in the database). Once images are uploaded, background jobs (using suckerpunch) are started to analyze and collect metadata about the images. Four of these jobs use AWS Rekognition to detect labels, moderation labels, text, and celebrities. One of thes jobs reads EXIF (if avaiable) metadata to determine the camera model used to take the image.
 
 ## Deployment
+
+### Single Instance Deployment
 
 The sample application is deployed via a CloudFormation template (template.yaml). When you launch this CloudFormation template it will prompt you for a few items:
 
@@ -49,6 +51,7 @@ You can launch the sample application stack through this button:
 WARNING: Make sure you deploy it to a supported region (See Below)
 
 [![Launch Stack](https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=ImageTrendsSampleApp&templateURL=https://s3-us-west-2.amazonaws.com/imagetrends-sample-application/template.yaml)
+
 
 ## Log Files
 

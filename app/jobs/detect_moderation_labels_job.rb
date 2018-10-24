@@ -55,7 +55,6 @@ class DetectModerationLabelsJob
             XRay.recorder.end_segment
 
             rescue StandardError => e
-                puts("--------------------------------- [ERROR] ---------------------------------")
                 puts(e)
                 @tag = Tag.new
                 @tag.name = "Error"

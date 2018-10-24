@@ -53,7 +53,6 @@ class DetectLabelsJob
 
 
             rescue StandardError => e
-                puts("--------------------------------- [ERROR] ---------------------------------")
                 puts(e)
                 @tag = Tag.new
                 @tag.name = "Error"
