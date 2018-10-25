@@ -94,6 +94,7 @@ class ImagesController < ApplicationController
   # DELETE /images/1
   # DELETE /images/1.json
   def destroy
+    authorize! :delete, @image
     image_logger.info("Attempting to delete Image: #{@image.id}")
     @image.destroy
     respond_to do |format|

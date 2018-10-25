@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery unless: -> { request.format.json? }
-  before_action :create_image
   before_action :log_action
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -14,15 +13,11 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from StandardError do |exception|
-    redirect_to main_app.root_url, :alert => "An unknown error occured."
-    application_logger.error("Unknown Error - Action: #{params[:action]} Controller: #{params[:controller]} Event: #{exception.message}")
+    redirect_to main_app.root_url, :alert => exception.message
+    application_logger.error("Error - Action: #{params[:action]} Controller: #{params[:controller]} Event: #{exception.message}")
   end
 
   private
-
-  def create_image
-    @new_image = Image.new
-  end
 
   def log_action
     if current_user

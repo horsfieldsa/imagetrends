@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :comments
   devise_for :users, :controllers => {:registrations => "registrations", :sessions =>"sessions"}
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   resources :images

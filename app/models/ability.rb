@@ -8,6 +8,7 @@ class Ability
       can :access, :rails_admin
     else
       can :manage, Image, :user_id => user.id
+      can :manage, Comment, :user_id => user.id
     end
   end
 end

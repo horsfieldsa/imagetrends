@@ -28,14 +28,9 @@
         </ul>
   
         <ul class="navbar-nav d-xl-none d-lg-none d-md-none mr-auto ">
-            <% if !user_signed_in? %>
+            <% if !user_signed_in? %>        
                 <li class="nav-item">
-                    <%= link_to 'Upload'.html_safe, new_user_session_path,
-                    :class => "nav-link"%>
-                </li>
-        
-                <li class="nav-item">
-                    <%= link_to 'Login'.html_safe, new_user_session_path,
+                    <%= link_to 'Sign In'.html_safe, new_user_session_path,
                     :class => "nav-link" %>
                 </li>
             <% else %>

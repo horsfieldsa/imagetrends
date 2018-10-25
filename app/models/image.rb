@@ -2,6 +2,7 @@ class Image < ApplicationRecord
 
   has_many :tags, dependent: :delete_all
   has_many :favorites, dependent: :delete_all
+  has_many :comments, dependent: :delete_all
   has_one_attached :image_image
   belongs_to :user
 

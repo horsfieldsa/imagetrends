@@ -7,7 +7,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <%= form_for @new_image do |f| %>
+      <%= form_for Image.new do |f| %>
         <div class="modal-body text-center">
           <div class="row">
             <div class="col">
@@ -18,7 +18,7 @@
               Select an Image to Upload
               </h6>
               <p>
-              The following extensions are supported: (.jpg)
+              Currently only .jpg smaller than 5mb are supported.
               </p>
               <label class="custom-file-upload btn btn-dark btn-block">
                 <%= f.file_field :image_image, direct_upload: true, accept: 'image/png,image/gif,image/jpeg' %>

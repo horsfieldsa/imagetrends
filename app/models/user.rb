@@ -4,6 +4,7 @@ class User < ApplicationRecord
 
   has_many :images, dependent: :delete_all
   has_many :favorites, dependent: :delete_all
+  has_many :comments, dependent: :delete_all
 
   validates :username, presence: true
   validates_uniqueness_of :email, :username
