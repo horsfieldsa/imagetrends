@@ -61,7 +61,7 @@ Resources:
     VPC:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3.amazonaws.com/imagetrends-sample-application/multi-instance-nested/vpc.yaml
+            TemplateURL: https://s3.amazonaws.com/imagetrends-sample-application/distributed-nested/vpc.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VpcCIDR: 10.180.0.0/16
@@ -73,7 +73,7 @@ Resources:
     SecurityGroups:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3.amazonaws.com/imagetrends-sample-application/multi-instance-nested/security-groups.yaml
+            TemplateURL: https://s3.amazonaws.com/imagetrends-sample-application/distributed-nested/security-groups.yaml
             Parameters: 
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !GetAtt VPC.Outputs.VPC
@@ -82,7 +82,7 @@ Resources:
     ALB:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3.amazonaws.com/imagetrends-sample-application/multi-instance-nested/load-balancers.yaml
+            TemplateURL: https://s3.amazonaws.com/imagetrends-sample-application/distributed-nested/load-balancers.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 VPC: !GetAtt VPC.Outputs.VPC
@@ -92,7 +92,7 @@ Resources:
     ASG:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3.amazonaws.com/imagetrends-sample-application/multi-instance-nested/autoscaling-group.yaml
+            TemplateURL: https://s3.amazonaws.com/imagetrends-sample-application/distributed-nested/autoscaling-group.yaml
             Parameters:
                 EnvironmentName: !Ref AWS::StackName
                 InstanceType: !Ref InstanceType
@@ -109,21 +109,21 @@ Resources:
     ImageUploadBucket:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3.amazonaws.com/imagetrends-sample-application/multi-instance-nested/bucket.yaml
+            TemplateURL: https://s3.amazonaws.com/imagetrends-sample-application/distributed-nested/bucket.yaml
 
     Database:
-            Type: AWS::CloudFormation::Stack
-            Properties:
-                TemplateURL: https://s3-us-west-2.amazonaws.com/imagetrends-sample-application/multi-instance-nested/database.yaml
-                Parameters:
-                    DBInstanceType: !Ref DBInstanceType
-                    EnvironmentName: !Ref AWS::StackName
-                    VPC: !GetAtt VPC.Outputs.VPC
-                    Subnets: !GetAtt VPC.Outputs.DatabaseSubnets
-                    SecurityGroup: !GetAtt SecurityGroups.Outputs.RDSInstanceSecurityGroup
-                    DBName: !Ref DBName
-                    DBUser: !Ref DBUser
-                    DBPassword: !Ref DBPassword
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: https://s3-us-west-2.amazonaws.com/imagetrends-sample-application/distributed-nested/database.yaml
+            Parameters:
+                DBInstanceType: !Ref DBInstanceType
+                EnvironmentName: !Ref AWS::StackName
+                VPC: !GetAtt VPC.Outputs.VPC
+                Subnets: !GetAtt VPC.Outputs.DatabaseSubnets
+                SecurityGroup: !GetAtt SecurityGroups.Outputs.RDSInstanceSecurityGroup
+                DBName: !Ref DBName
+                DBUser: !Ref DBUser
+                DBPassword: !Ref DBPassword
 
 Outputs:
 
