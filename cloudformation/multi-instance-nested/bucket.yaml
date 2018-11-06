@@ -7,7 +7,7 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: PublicRead
-    DeletionPolicy: Retain
+    DeletionPolicy: Delete
   
   ImageUploadBucketPolicy:
     Type: AWS::S3::BucketPolicy
@@ -23,12 +23,12 @@ Resources:
             Resource: !Join 
               - ''
               - - 'arn:aws:s3:::'
-                - !Ref S3Bucket
+                - !Ref ImageUploadBucket
                 - /*
-      Bucket: !Ref S3Bucket
+      Bucket: !Ref ImageUploadBucket
 
 Outputs:
 
     ImageUploadBucket:
-        Description: !Ref S3Bucket
-        Value: !GetAtt 
+        Description: S3 Bucket where images are uploaded to.
+        Value: !Ref ImageUploadBucket

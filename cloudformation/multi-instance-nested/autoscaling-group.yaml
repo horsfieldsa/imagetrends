@@ -87,9 +87,7 @@ Mappings:
       Arch: HVM64
   AWSRegionArch2AMI:
     us-west-2:
-      HVM64: ami-0a822544f4ba8ac3d
-    eu-west-1:
-      HVM64: ami-0d5421359c2929e29
+      HVM64: ami-017f65f7fbaa07401
 
 Resources:
 
@@ -155,7 +153,7 @@ Resources:
                     -e DB_PORT=${PrimaryInstancePort} \
                     -e RAILS_ENV=production \
                     -e RAILS_MASTER_KEY=cdf56d76316a62b4532137d4fbb7b1b5 \
-                    -e IMAGE_UPLOAD_BUCKET=${ImageUploadBucket}
+                    -e IMAGE_UPLOAD_BUCKET=${ImageUploadBucket} \
                     --network=host --restart=unless-stopped imagetrends:latest
                     # Signal Completion
                     /opt/aws/bin/cfn-signal -e 0 --region ${AWS::Region} --stack ${AWS::StackName} --resource AppAutoScalingGroup
@@ -187,7 +185,6 @@ Resources:
       Roles: 
         - 
           Ref: "AccessRoleRekognitionReadOnly"
-
 
 Outputs:
 
