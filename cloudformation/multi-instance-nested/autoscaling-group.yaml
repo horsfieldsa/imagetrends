@@ -1,0 +1,196 @@
+Description: >
+    This template launche our app instances within an autoscaling group and associates an instance profile
+    to allow access to Rekognition
+
+Parameters:
+
+    EnvironmentName:
+        Description: An environment name that will be prefixed to resource names
+        Type: String
+
+    KeyName:
+        Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+        Type: AWS::EC2::KeyPair::KeyName
+        ConstraintDescription: must be the name of an existing EC2 KeyPair.
+
+    InstanceType:
+        Description: App EC2 instance type
+        Type: String
+        Default: t2.small
+        AllowedValues:
+        - t2.nano
+        - t2.micro
+        - t2.small
+        - t2.medium
+        - t2.large
+        ConstraintDescription: must be a valid EC2 instance type.
+
+    ClusterSize:
+        Description: How many app hosts do you want to initially deploy?
+        Type: Number
+        Default: 2
+
+    VPC:
+        Description: Choose which VPC this app cluster should be deployed to
+        Type: AWS::EC2::VPC::Id
+
+    Subnets:
+        Description: Choose which subnets this app cluster should be deployed to
+        Type: List<AWS::EC2::Subnet::Id>
+
+    SecurityGroup:
+        Description: Select the Security Group to use for the app cluster hosts
+        Type: AWS::EC2::SecurityGroup::Id
+
+    AppTargetGroup:
+        Description: Target group to register app instances to.
+        Type: String
+
+    DBName:
+        Description: Imagetrends Database Name
+        Type: String
+        Default: imagetrends
+
+    DBUser:
+        Description: Imagetrends Database User
+        Type: String
+        Default: imagetrends
+        
+    DBPassword:
+        Description: Imagetrends Database User Password
+        Type: String
+        Default: imagetrends
+
+    PrimaryInstanceName:
+        Description: A reference to RDS Primary Instance Name
+        Type: String
+
+    PrimaryInstancePort:
+        Description: A reference to RDS Primary Instance Port
+        Type: String
+
+    ImageUploadBucket:
+        Description: S3 Bucket where images will be uploaded to.
+        Type: String
+
+Mappings:
+  AWSInstanceType2Arch:
+    t2.nano:
+      Arch: HVM64
+    t2.micro:
+      Arch: HVM64
+    t2.small:
+      Arch: HVM64
+    t2.medium:
+      Arch: HVM64
+    t2.large:
+      Arch: HVM64
+  AWSRegionArch2AMI:
+    us-west-2:
+      HVM64: ami-0a822544f4ba8ac3d
+    eu-west-1:
+      HVM64: ami-0d5421359c2929e29
+
+Resources:
+
+  AppAutoScalingGroup:
+        Type: AWS::AutoScaling::AutoScalingGroup
+        Properties:
+            VPCZoneIdentifier: !Ref Subnets
+            LaunchConfigurationName: !Ref AppLaunchConfiguration
+            MinSize: !Ref ClusterSize
+            MaxSize: !Ref ClusterSize
+            DesiredCapacity: !Ref ClusterSize
+            TargetGroupARNs:
+              - !Ref AppTargetGroup
+            Tags:
+                - Key: Name
+                  Value: !Sub ${EnvironmentName} App host
+                  PropagateAtLaunch: true
+        CreationPolicy:
+            ResourceSignal:
+                Timeout: PT15M
+        UpdatePolicy:
+            AutoScalingRollingUpdate:
+                MinInstancesInService: 1
+                MaxBatchSize: 1
+                PauseTime: PT15M
+                SuspendProcesses:
+                  - HealthCheck
+                  - ReplaceUnhealthy
+                  - AZRebalance
+                  - AlarmNotification
+                  - ScheduledActions
+                WaitOnResourceSignals: true
+
+  AppLaunchConfiguration:
+        Type: AWS::AutoScaling::LaunchConfiguration
+        Properties:
+            ImageId:
+              Fn::FindInMap:
+              - AWSRegionArch2AMI
+              - Ref: AWS::Region
+              - Fn::FindInMap:
+                - AWSInstanceType2Arch
+                - Ref: InstanceType
+                - Arch
+            InstanceType: !Ref InstanceType
+            SecurityGroups:
+                - !Ref SecurityGroup
+            IamInstanceProfile: !Ref InstanceProfileRekognitionReadOnly
+            KeyName: !Ref KeyName
+            UserData:
+                'Fn::Base64': !Sub |
+                    #!/bin/bash -xe
+                    # Start docker
+                    service docker start
+                    # Start x-ray daemon
+                    nohup /usr/bin/xray -o -n ${AWS::Region} &
+                    # Run application
+                    docker run -d --label=imagetrends -it -v /opt/imagetrends-logs:/app/log -e "AWS_REGION=${AWS::Region}" \
+                    -e DB_NAME=${DBName} \
+                    -e DB_USER=${DBUser} \
+                    -e DB_PASS=${DBPassword} \
+                    -e DB_HOST=${PrimaryInstanceName} \
+                    -e DB_PORT=${PrimaryInstancePort} \
+                    -e RAILS_ENV=production \
+                    -e RAILS_MASTER_KEY=cdf56d76316a62b4532137d4fbb7b1b5 \
+                    -e IMAGE_UPLOAD_BUCKET=${ImageUploadBucket}
+                    --network=host --restart=unless-stopped imagetrends:latest
+                    # Signal Completion
+                    /opt/aws/bin/cfn-signal -e 0 --region ${AWS::Region} --stack ${AWS::StackName} --resource AppAutoScalingGroup
+  
+  AccessRoleRekognitionReadOnly:
+    Type: "AWS::IAM::Role"
+    Properties:
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonRekognitionReadOnlyAccess
+        - arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess
+        - arn:aws:iam::aws:policy/ComprehendReadOnly
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess # TODO: Restrict
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Principal: 
+              Service: 
+                - "ec2.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+      Path: "/"
+
+  InstanceProfileRekognitionReadOnly: 
+    Type: "AWS::IAM::InstanceProfile"
+    Properties: 
+      Path: "/"
+      Roles: 
+        - 
+          Ref: "AccessRoleRekognitionReadOnly"
+
+
+Outputs:
+
+    AppAutoScalingGroup: 
+        Description: The autoscaling group for the application.
+        Value: !Ref AppAutoScalingGroup

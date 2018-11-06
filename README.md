@@ -122,12 +122,12 @@ E, [2018-10-24T12:14:34.302484 #3374] ERROR -- : Error detecting text for Image:
 ### Supported Regions
 
 * us-west-2 (Oregon)
+* eu-west-1 (Ireland)
 
 ### Planned Regions
 
 * us-east-1 (Northern Virginia)
 * us-east-2 (Ohio)
-* eu-west-1 (Ireland)
 * ap-northeast-1 (Tokyo)
 * ap-southeast-2 (Sydney)
 

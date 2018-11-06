@@ -1,0 +1,180 @@
+Description: >
+    This template deploys a VPC, with a pair of private subnets spread 
+    across two Availabilty Zones (App and Database). 
+
+Parameters:
+
+    EnvironmentName:
+        Description: An environment name that will be prefixed to resource names
+        Type: String
+
+    VpcCIDR: 
+        Description: Please enter the IP range (CIDR notation) for this VPC
+        Type: String
+        Default: 10.192.0.0/16
+
+    AppSubnet1CIDR:
+        Description: Please enter the IP range (CIDR notation) for the app subnet in the first Availability Zone
+        Type: String
+        Default: 10.192.10.0/24
+
+    AppSubnet2CIDR:
+        Description: Please enter the IP range (CIDR notation) for the app subnet in the second Availability Zone
+        Type: String
+        Default: 10.192.11.0/24
+
+    DatabaseSubnet1CIDR:
+        Description: Please enter the IP range (CIDR notation) for the database subnet in the first Availability Zone
+        Type: String
+        Default: 10.192.20.0/24
+
+    DatabaseSubnet2CIDR:
+        Description: Please enter the IP range (CIDR notation) for the database subnet in the second Availability Zone
+        Type: String
+        Default: 10.192.21.0/24
+
+Resources:
+
+    VPC: 
+        Type: AWS::EC2::VPC
+        Properties:
+            CidrBlock: !Ref VpcCIDR
+            EnableDnsHostnames: true
+            Tags: 
+                - Key: Name 
+                  Value: !Ref EnvironmentName
+            
+    InternetGateway:
+        Type: AWS::EC2::InternetGateway
+        Properties:
+            Tags:
+                - Key: Name
+                  Value: !Ref EnvironmentName
+            
+    InternetGatewayAttachment:
+        Type: AWS::EC2::VPCGatewayAttachment
+        Properties:
+            InternetGatewayId: !Ref InternetGateway
+            VpcId: !Ref VPC
+
+    AppSubnet1: 
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref VPC
+            AvailabilityZone: !Select [ 0, !GetAZs '' ]
+            CidrBlock: !Ref AppSubnet1CIDR
+            MapPublicIpOnLaunch: true
+            Tags: 
+                - Key: Name 
+                  Value: !Sub ${EnvironmentName} App Subnet (AZ1)
+
+    AppSubnet2: 
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref VPC
+            AvailabilityZone: !Select [ 1, !GetAZs '' ]
+            CidrBlock: !Ref AppSubnet2CIDR
+            MapPublicIpOnLaunch: true
+            Tags: 
+                - Key: Name 
+                  Value: !Sub ${EnvironmentName} App Subnet (AZ2)
+
+    DatabaseSubnet1: 
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref VPC
+            AvailabilityZone: !Select [ 0, !GetAZs '' ]
+            CidrBlock: !Ref DatabaseSubnet1CIDR
+            MapPublicIpOnLaunch: false
+            Tags: 
+                - Key: Name 
+                  Value: !Sub ${EnvironmentName} Database Subnet (AZ1)
+
+    DatabaseSubnet2: 
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref VPC
+            AvailabilityZone: !Select [ 1, !GetAZs '' ]
+            CidrBlock: !Ref DatabaseSubnet2CIDR
+            MapPublicIpOnLaunch: false
+            Tags: 
+                - Key: Name 
+                  Value: !Sub ${EnvironmentName} Database Subnet (AZ2)
+
+    AppRouteTable:
+        Type: AWS::EC2::RouteTable
+        Properties: 
+            VpcId: !Ref VPC
+            Tags: 
+                - Key: Name 
+                  Value: !Sub ${EnvironmentName} App Routes
+
+    DefaultPublicRoute: 
+        Type: AWS::EC2::Route
+        DependsOn: InternetGatewayAttachment
+        Properties: 
+            RouteTableId: !Ref AppRouteTable
+            DestinationCidrBlock: 0.0.0.0/0
+            GatewayId: !Ref InternetGateway
+
+    AppSubnet1RouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+            RouteTableId: !Ref AppRouteTable
+            SubnetId: !Ref AppSubnet1
+
+    AppSubnet2RouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+            RouteTableId: !Ref AppRouteTable
+            SubnetId: !Ref AppSubnet2
+    
+    DatabaseRouteTable:
+        Type: AWS::EC2::RouteTable
+        Properties: 
+            VpcId: !Ref VPC
+            Tags: 
+                - Key: Name 
+                  Value: !Sub ${EnvironmentName} Database Routes (AZ1)
+
+    DatabaseSubnet1RouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+            RouteTableId: !Ref DatabaseRouteTable
+            SubnetId: !Ref DatabaseSubnet1
+
+    DatabaseSubnet2RouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+            RouteTableId: !Ref DatabaseRouteTable
+            SubnetId: !Ref DatabaseSubnet2
+
+Outputs: 
+
+    VPC: 
+        Description: A reference to the created VPC
+        Value: !Ref VPC
+
+    AppSubnets:
+        Description: A list of the app subnets
+        Value: !Join [ ",", [ !Ref AppSubnet1, !Ref AppSubnet2 ]]
+
+    DatabaseSubnets:
+        Description: A list of the private subnets
+        Value: !Join [ ",", [ !Ref DatabaseSubnet1, !Ref DatabaseSubnet2 ]]
+
+    AppSubnet1:
+        Description: A reference to the app subnet in the 1st Availability Zone
+        Value: !Ref AppSubnet1
+
+    AppSubnet2: 
+        Description: A reference to the app subnet in the 2nd Availability Zone
+        Value: !Ref AppSubnet2
+
+    DatabaseSubnet1:
+        Description: A reference to the database subnet in the 1st Availability Zone
+        Value: !Ref DatabaseSubnet1
+
+    DatabaseSubnet2: 
+        Description: A reference to the database subnet in the 2nd Availability Zone
+        Value: !Ref DatabaseSubnet2

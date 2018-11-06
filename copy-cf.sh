@@ -1,0 +1,1 @@
+aws s3 cp cloudformation/ s3://imagetrends-sample-application/ --recursive

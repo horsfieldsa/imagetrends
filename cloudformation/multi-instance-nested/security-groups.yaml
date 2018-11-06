@@ -1,0 +1,77 @@
+Description: >
+    This template contains the security groups required by our entire stack.
+
+Parameters:
+    
+    EnvironmentName:
+        Description: An environment name that will be prefixed to resource names
+        Type: String
+    
+    VPC:
+        Type: AWS::EC2::VPC::Id
+        Description: Choose which VPC the security groups should be deployed to
+
+    SSHLocation:
+        Description: The IP address range that can be used to SSH to the EC2 instances
+        Type: String
+        MinLength: '9'
+        MaxLength: '18'
+        Default: 0.0.0.0/0
+        AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+        ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+
+Resources:
+
+    AppHostSecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Properties: 
+            VpcId: !Ref VPC
+            GroupDescription: Access to the App hosts and the application that run on them
+            SecurityGroupIngress:
+                - SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup 
+                  IpProtocol: -1
+                - CidrIp: !Ref SSHLocation
+                  IpProtocol: -1
+            Tags: 
+                - Key: Name
+                  Value: !Sub ${EnvironmentName}-App-Hosts
+
+    LoadBalancerSecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Properties: 
+            VpcId: !Ref VPC
+            GroupDescription: Access to the load balancer that sits in front of EC2
+            SecurityGroupIngress:
+                - CidrIp: 0.0.0.0/0
+                  IpProtocol: -1
+            Tags: 
+                - Key: Name
+                  Value: !Sub ${EnvironmentName}-LoadBalancer
+
+    RDSInstanceSecurityGroup:
+            Type: AWS::EC2::SecurityGroup
+            Properties:
+                VpcId: !Ref VPC
+                GroupDescription: Access to the RDS Instance
+                SecurityGroupIngress:
+                    - SourceSecurityGroupId: !Ref AppHostSecurityGroup
+                      IpProtocol: tcp
+                      FromPort: '3306'
+                      ToPort: '3306'
+                Tags:
+                    - Key: Name
+                      Value: !Sub ${EnvironmentName}-RDS-Instance
+
+Outputs:
+
+    AppHostSecurityGroup: 
+        Description: A reference to the security group for EC2 hosts
+        Value: !Ref AppHostSecurityGroup
+
+    LoadBalancerSecurityGroup:
+        Description: A reference to the security group for load balancers
+        Value: !Ref LoadBalancerSecurityGroup
+
+    RDSInstanceSecurityGroup:
+        Description: A reference to the security group for RDS instance
+        Value: !Ref RDSInstanceSecurityGroup   

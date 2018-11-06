@@ -48,7 +48,9 @@ Mappings:
       Arch: HVM64
   AWSRegionArch2AMI:
     us-west-2:
-      HVM64: ami-0d1000aff9a9bad89 # AL Base AMI
+      HVM64: ami-0a822544f4ba8ac3d
+    eu-west-1:
+      HVM64: ami-0d5421359c2929e29
 
 Resources:
 
@@ -99,42 +101,19 @@ Resources:
       UserData:
         'Fn::Base64': !Sub |
             #!/bin/bash -xe
-            # Update instance
-            yum update -y
-            # Install git
-            yum install -y git
-            # Install x-ray Daemon
-            curl https://s3.dualstack.us-east-2.amazonaws.com/aws-xray-assets.us-east-2/xray-daemon/aws-xray-daemon-3.x.rpm -o /home/ec2-user/xray.rpm
-            yum install -y /home/ec2-user/xray.rpm
-            # Install stress-ng
-            curl http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/l/libbsd-0.8.3-1.el7.x86_64.rpm -o /home/ec2-user/libbsd.rpm
-            yum install -y /home/ec2-user/libbsd.rpm
-            curl http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/s/stress-ng-0.07.29-2.el7.x86_64.rpm -o /home/ec2-user/stress-ng.rpm
-            yum install -y /home/ec2-user/stress-ng.rpm
-            # Install docker
-            amazon-linux-extras install -y docker
-            # Install docker-compose
-            sudo curl -L "https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
             # Start docker
             service docker start
-            # Clone imagetrends repo (TODO: Replace w/ public docker image)
-            git clone https://github.com/horsfieldsa/imagetrends.git /opt/imagetrends
-            # Build imagetrends docker image
-            docker build -t imagetrends:latest /opt/imagetrends
-            # Copy docker-compose.yaml
-            cp /opt/imagetrends/docker-compose.yaml /opt/imagetrends.yaml
-            # Clean-up
-            rm -rf /opt/imagetrends
+            # Start x-ray daemon
+            nohup /usr/bin/xray -o -n ${AWS::Region} &
             # Run application
             iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 3000
-            docker-compose -f /opt/imagetrends.yaml up -d
+            docker-compose -f /opt/imagetrends.yaml up -d  
             # Signal Completion
             /opt/aws/bin/cfn-signal -e 0 --region ${AWS::Region} --stack ${AWS::StackName} --resource EC2Instance
     CreationPolicy:
       ResourceSignal:
         Count: 1
-        Timeout: PT5M
+        Timeout: PT5M         
 
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup

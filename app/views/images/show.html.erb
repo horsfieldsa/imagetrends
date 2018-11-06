@@ -48,7 +48,6 @@
         <td>
            <% if @image.tags.count > 0 %>
             <% @image.tags.each do |tag| %>
-
                 <% if tag.source == "Rekognition - Detect Labels"%>
                   <%= link_to tag.name, "/images/tag/#{tag.name}", :title => "#{tag.name} - #{number_to_percentage(tag.confidence)}", :class => "badge badge-secondary" %>
                 <% end %>
@@ -63,8 +62,7 @@
                 <% end %> 
                 <% if tag.source == "Extract EXIF Data"%>
                   <%= link_to tag.name, "/images/tag/#{tag.name}", :title => "#{tag.name}", :class => "badge badge-dark" %>
-                <% end %> 
-                                     
+                <% end %>                            
             <% end %>
           <% else %>
             <span class="badge badge-secondary">No Tags</span>
@@ -118,8 +116,7 @@
   <div class="row">
     <div class="col-12">
        <% @image.comments.order(created_at: :desc).each do |comment| %>
-
-        <div class="row m-2">
+        <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <span class="fa-stack text-muted">
               <i class="fa fa-circle fa-stack-2x"></i>
@@ -127,43 +124,35 @@
             </span>             
              <%= comment.user.username %>
             <span class="badge badge-secondary pull-right">
-
-             <% if !comment.sentiment.nil? && !comment.sentiment.empty? %>
-                <% if comment.sentiment == "POSITIVE" %>
-                  Positive
-                <% elsif comment.sentiment == "NEGATIVE" %>
-                  Negative
-                <% elsif comment.sentiment == "NEUTRAL" %>
-                  Neutral
-                <% elsif comment.sentiment == "MIXED" %>
-                  Mixed
-                <% elsif comment.sentiment == "ERROR" %>
-                  Error
-                <% else%>
-                  <%= comment.sentiment %>
-                <% end%>
-             <% end %>
-
+              <% if !comment.sentiment.nil? && !comment.sentiment.empty? %>
+                  <% if comment.sentiment == "POSITIVE" %>
+                    Positive
+                  <% elsif comment.sentiment == "NEGATIVE" %>
+                    Negative
+                  <% elsif comment.sentiment == "NEUTRAL" %>
+                    Neutral
+                  <% elsif comment.sentiment == "MIXED" %>
+                    Mixed
+                  <% elsif comment.sentiment == "ERROR" %>
+                    Error
+                  <% else%>
+                    <%= comment.sentiment %>
+                  <% end%>
+              <% end %>
             </span>
           </div>
         </div>
-
-        <div class="row m-2">
+        <div class="row">
           <div class="col-xs-10 col-sm-10 col-md-10 col-lg-11 col-xl-11 text-black-50">
-            <%= comment.comment %>
+            <p class="ml-5"><%= comment.comment %></p>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-2 col-lg-1 col-xl-1">
-            <% if can? :update, comment %>
-              <%= link_to '<i class="fa fa-pencil"></i>'.html_safe, edit_comment_path(comment), :class => "pull-right ml-2" %>
-            <% end %>
             <% if can? :delete, comment %>
               <%= link_to '<i class="fa fa-trash"></i>'.html_safe, comment, method: :delete, data: { confirm: 'Are you sure?' }, :class => "pull-right" %>
             <% end %>
           </div>
         </div>
-
         <hr/>
-
       <% end %>
     </div>
   </div>
@@ -175,7 +164,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="commentModalLabel">Add Comment</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="comment-dismiss">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -183,18 +172,19 @@
         <div class="modal-body text-center">
           <div class="row">
             <div class="col">
+              <span><div id="comment-char-count" class="text-muted pull-right">0/500</div></span>
               <%= f.hidden_field :user_id, value: current_user.id %>
               <%= f.hidden_field :image_id, value: @image.id %>
               <%= f.hidden_field :sentiment, value: "Not Detected"%>
               <div class="form-group">
-                <%= f.text_area :comment, :class => "form-control", :rows => "4" %>
+                <%= f.text_area :comment, :class => "form-control", :rows => "4", :id => 'comment-text' %>
               </div>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <%= f.button "Comment".html_safe, :class => "btn btn-primary", type: :submit  %>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="comment-cancel">Cancel</button>
+          <%= f.button "Comment".html_safe, :class => "btn btn-primary disabled", type: :submit, :id => "comment-submit", :disabled => true  %>
         </div>
       <% end %>
     </div>
