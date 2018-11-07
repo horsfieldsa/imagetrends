@@ -156,7 +156,7 @@ Resources:
                     echo export IMAGE_UPLOAD_BUCKET=${ImageUploadBucket} >> /etc/profile
                     source /etc/profile
                     # Deploy App
-                    git clone https://github.com/horsfieldsa/imagetrends.git /opt/imagetrends --branch v1.0
+                    git clone https://github.com/horsfieldsa/imagetrends.git /opt/imagetrends --branch v1.0.1
                     cd /opt/imagetrends
                     bundle install
                     bin/rails db:create
