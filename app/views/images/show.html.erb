@@ -100,9 +100,11 @@
   <div class="col-6">
     <h6>Comments</h6>
   </div>
+  <% if current_user %>
   <div class="col-6">
     <%= link_to "Add Comment".html_safe, "#", :class => "btn btn-outline-primary pull-right", 'data-toggle' => 'modal', 'data-target' => '#commentModal' %>
   </div>
+  <% end %>
 </div>
 
 <hr/>
@@ -158,6 +160,7 @@
   </div>
 <% end %>
 
+<% if current_user %>
 <!-- Create Commment Modal -->
 <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -190,3 +193,4 @@
     </div>
   </div>
 </div>
+<% end %>
