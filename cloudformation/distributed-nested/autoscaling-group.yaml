@@ -88,6 +88,16 @@ Mappings:
   AWSRegionArch2AMI:
     us-west-2:
       HVM64: ami-027a2e5474c0bc6cd
+    eu-west-1:
+      HVM64: ami-083b2042d47f63709
+    us-east-1:
+      HVM64: ami-0f5dcea88f141f88f
+    us-east-2:
+      HVM64: ami-095c14d0f3eb74872
+    ap-northeast-1:
+      HVM64: ami-0de43e4a01cef90e3
+    ap-southeast-2:
+      HVM64: ami-00a62ce5a45899d72
 
 Resources:
 
@@ -135,7 +145,7 @@ Resources:
             InstanceType: !Ref InstanceType
             SecurityGroups:
                 - !Ref SecurityGroup
-            IamInstanceProfile: !Ref InstanceProfileRekognitionReadOnly
+            IamInstanceProfile: !Ref ImagetrendsInstanceProfile
             KeyName: !Ref KeyName
             UserData:
                 'Fn::Base64': !Sub |
@@ -159,6 +169,7 @@ Resources:
                     git clone https://github.com/horsfieldsa/imagetrends.git /opt/imagetrends --branch v1.0.1
                     cd /opt/imagetrends
                     bundle install
+                    RAILS_ENV=production rails assets:precompile
                     bin/rails db:create
                     bin/rails db:migrate
                     bin/rails db:seed
@@ -166,14 +177,16 @@ Resources:
                     # Signal Completion
                     /opt/aws/bin/cfn-signal -e 0 --region ${AWS::Region} --stack ${AWS::StackName} --resource AppAutoScalingGroup
                     
-  AccessRoleRekognitionReadOnly:
+  ImagetrendsInstanceAccessRole:
     Type: "AWS::IAM::Role"
     Properties:
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/AmazonRekognitionReadOnlyAccess
         - arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess
         - arn:aws:iam::aws:policy/ComprehendReadOnly
-        - arn:aws:iam::aws:policy/AmazonS3FullAccess # TODO: Restrict
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+        - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess # TODO: Restrict to Bucket
       AssumeRolePolicyDocument: 
         Version: "2012-10-17"
         Statement: 
@@ -186,13 +199,13 @@ Resources:
               - "sts:AssumeRole"
       Path: "/"
 
-  InstanceProfileRekognitionReadOnly: 
+  ImagetrendsInstanceProfile: 
     Type: "AWS::IAM::InstanceProfile"
     Properties: 
       Path: "/"
       Roles: 
         - 
-          Ref: "AccessRoleRekognitionReadOnly"
+          Ref: "ImagetrendsInstanceAccessRole"
 
 Outputs:
 

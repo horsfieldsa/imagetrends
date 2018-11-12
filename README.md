@@ -22,6 +22,15 @@ WARNING: Make sure you deploy it to a supported region (See Below)
 
 [![Launch Stack](https://cdn.rawgit.com/buildkite/cloudformation-launch-stack-button-svg/master/launch-stack.svg)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=ImageTrendsSampleApp&templateURL=https://s3-us-west-2.amazonaws.com/imagetrends-sample-application/distributed.yaml)
 
+### Supported Regions
+
+* us-west-2 (Oregon)
+* eu-west-1 (Ireland)
+* us-east-1 (Northern Virginia)
+* us-east-2 (Ohio)
+* ap-northeast-1 (Tokyo)
+* ap-southeast-2 (Sydney)
+
 ## Log Files
 
 * Application: /opt/imagetrends/logs
@@ -82,20 +91,6 @@ E, [2018-10-24T12:14:34.302484 #3374] ERROR -- : Error detecting text for Image:
 2. Open the Administration application. You may need to access the Administration application directly at /admin.
 3. Delete the last image you uploaded. (Look for several Error tags)
 
-
-## Limitations
-
-### Supported Regions
-
-* us-west-2 (Oregon)
-* eu-west-1 (Ireland)
-
-### Planned Regions
-
-* us-east-1 (Northern Virginia)
-* us-east-2 (Ohio)
-* ap-northeast-1 (Tokyo)
-* ap-southeast-2 (Sydney)
 
 ## Sample Images
 
