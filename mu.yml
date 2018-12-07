@@ -40,8 +40,8 @@ service:
   
   database:
     name: imagetrends
+    engine: aurora
     engineMode: serverless
     minSize: 2
     maxSize: 4
     autoPauseSeconds: 300 
-
