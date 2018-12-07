@@ -3,8 +3,7 @@
 /wait
 
 cd /app
-rails db:create
-rails db:schema:load
+rails db:migrate
 rails db:seed
 
 exec "$@"
