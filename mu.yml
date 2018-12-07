@@ -39,4 +39,9 @@ service:
         environment: production
   
   database:
-    name: imagetrends-db
+    name: imagetrends
+    engineMode: serverless
+    minSize: 2
+    maxSize: 4
+    autoPauseSeconds: 300 
+
