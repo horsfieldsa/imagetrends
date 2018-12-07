@@ -1,0 +1,42 @@
+environments:
+  - name: acceptance
+    provider: ecs-fargate 
+  - name: production
+    provider: ecs-fargate     
+
+service:
+  name: imagetrends-ui
+  dockerfile: ./Dockerfile
+  healthEndpoint: /healthcheck.html
+  port: 3000
+  desiredCount: 2
+  minSize: 1
+  maxSize: 4
+  pathPatterns:
+  - /*
+  environment:
+    RAILS_ENV: "production"
+    RAILS_MASTER_KEY: "cdf56d76316a62b4532137d4fbb7b1b5"
+    DB_NAME: ${DatabaseName}
+    DB_USER: ${DatabaseMasterUsername}
+    DB_PASS: ${DatabaseMasterPassword}
+    DB_HOST: ${DatabaseEndpointAddress}
+    DB_PORT: ${DatabaseEndpointPort}
+    IMAGE_UPLOAD_BUCKET: "test"
+
+  pipeline:
+      source:
+        provider: GitHub
+        repo: horsfieldsa/imagetrends
+        branch: master
+      build:
+        disabled: false
+      acceptance:
+        disabled: false
+        environment: acceptance
+      production:
+        disabled: false
+        environment: production
+  
+  database:
+    name: imagetrends-db
