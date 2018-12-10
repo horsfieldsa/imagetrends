@@ -59,6 +59,7 @@ service:
     DB_HOST: ${DatabaseEndpointAddress}
     DB_PORT: ${DatabaseEndpointPort}
     IMAGE_UPLOAD_BUCKET: "test"
+    RAILS_LOG_TO_STDOUT: "true"
 
   pipeline:
       source:
