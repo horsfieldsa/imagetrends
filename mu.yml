@@ -46,7 +46,7 @@ service:
   desiredCount: 2
   minSize: 1
   maxSize: 4
-  cpu: 20
+  cpu: 128
   memory: 1024
   pathPatterns:
   - /*
@@ -80,4 +80,4 @@ service:
     engine: aurora
     engineMode: serverless
     minSize: 2
-    maxSize: 4
+    maxSize: 12
