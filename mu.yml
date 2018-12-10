@@ -58,7 +58,7 @@ service:
     DB_PASS: ${DatabaseMasterPassword}
     DB_HOST: ${DatabaseEndpointAddress}
     DB_PORT: ${DatabaseEndpointPort}
-    IMAGE_UPLOAD_BUCKET: "test"
+    IMAGE_UPLOAD_BUCKET: ${ImageUploadBucket}
     RAILS_LOG_TO_STDOUT: "true"
 
   pipeline:
