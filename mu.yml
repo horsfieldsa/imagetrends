@@ -1,8 +1,37 @@
 environments:
   - name: acceptance
     provider: ecs-fargate 
+    discovery:
+      provider: route53
+      name: acceptance.imagetrends.local    
   - name: production
     provider: ecs-fargate     
+    discovery:
+      provider: route53
+      name: production.imagetrends.local  
+
+templates:
+  mu-iam-service-imagetrends-ui-acceptance:
+    Resources:
+      EcsTaskRole:
+        Properties:
+          ManagedPolicyArns: 
+            - arn:aws:iam::aws:policy/AmazonRekognitionReadOnlyAccess
+            - arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess
+            - arn:aws:iam::aws:policy/ComprehendReadOnly
+          Policies:
+          - PolicyName: upload-image
+            PolicyDocument:
+              Statement:
+              - Effect: Allow
+                Action:
+                - s3:PutObject
+                - s3:PutObjectAcl
+                - s3:GetObject
+                - s3:GetObjectAcl
+                - s3:DeleteObject
+                - s3:ListBucket
+                Resource: '*'
 
 service:
   name: imagetrends-ui
@@ -37,7 +66,7 @@ service:
         disabled: false
         environment: acceptance
       production:
-        disabled: false
+        disabled: true
         environment: production
   
   database:
@@ -46,4 +75,3 @@ service:
     engineMode: serverless
     minSize: 2
     maxSize: 4
-    autoPauseSeconds: 300 
