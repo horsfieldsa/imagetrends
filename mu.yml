@@ -37,14 +37,6 @@ templates:
     Resources:
       ImageUploadBucket:
         Type: AWS::S3::Bucket
-        Properties:
-          CorsConfiguration:
-            CorsRules:
-            - AllowedHeaders: ['*']
-              AllowedMethods: [PUT]
-              AllowedOrigins: ['*']
-              Id: appCORSRuleAcceptance
-              MaxAge: '3600'
 
 service:
   name: imagetrends-ui
