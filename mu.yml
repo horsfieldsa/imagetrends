@@ -42,7 +42,7 @@ templates:
         Properties:
           GroupDescription: "Elasticache Security Group"
           VpcId:
-            Fn::ImportValue: !Ref VpcId
+            Fn::ImportValue: "mu-environment-acceptance-VpcId"
           SecurityGroupIngress:
             -
               IpProtocol: "tcp"
