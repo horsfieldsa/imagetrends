@@ -47,7 +47,7 @@ templates:
               FromPort: "6379"
               ToPort: "6379"
               SourceSecurityGroupName:
-                Ref: ${InstanceSecurityGroup}
+                Ref: ${ServiceSecurityGroup}
       ElasticacheCluster:
         Type: AWS::ElastiCache::CacheCluster
         Properties:
