@@ -46,8 +46,7 @@ templates:
               IpProtocol: "tcp"
               FromPort: "6379"
               ToPort: "6379"
-              SourceSecurityGroupName:
-                Ref: ${ServiceSecurityGroup}
+              SourceSecurityGroupName: ${ServiceSecurityGroup}
       ElasticacheCluster:
         Type: AWS::ElastiCache::CacheCluster
         Properties:
