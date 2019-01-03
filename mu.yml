@@ -37,30 +37,6 @@ templates:
     Resources:
       ImageUploadBucket:
         Type: AWS::S3::Bucket
-      ElasticacheSecurityGroup:
-        Type: AWS::EC2::SecurityGroup
-        Properties:
-          GroupDescription: "Elasticache Security Group"
-          VpcId:
-            Fn::ImportValue: "mu-environment-acceptance-VpcId"
-          SecurityGroupIngress:
-            -
-              IpProtocol: "tcp"
-              FromPort: "6379"
-              ToPort: "6379"
-              SourceSecurityGroupName: ${ServiceSecurityGroup}
-      ElasticacheCluster:
-        Type: AWS::ElastiCache::CacheCluster
-        Properties:
-          AutoMinorVersionUpgrade: "true"
-          Engine: "redis"
-          CacheNodeType: "cache.t2.micro"
-          NumCacheNodes: "1"
-          VpcSecurityGroupIds:
-            -
-              Fn::GetAtt:
-                - "ElasticacheSecurityGroup"
-                - "GroupId"
 
 service:
   name: imagetrends-ui
