@@ -41,8 +41,7 @@ templates:
         Type: AWS::EC2::SecurityGroup
         Properties:
           GroupDescription: "Elasticache Security Group"
-          VpcId:
-            Fn::ImportValue: !Sub ${VpcId}
+          VpcId: ${VpcId}
           SecurityGroupIngress:
             -
               IpProtocol: "tcp"
