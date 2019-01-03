@@ -71,7 +71,7 @@ service:
   minSize: 1
   maxSize: 4
   cpu: 256
-  memory: 4096
+  memory: 2048
   pathPatterns:
   - /*
   environment:
