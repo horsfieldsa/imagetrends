@@ -1,0 +1,14 @@
+<a href="javascript:" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
+<% if @events.count == 0 %>
+  <div class="card text-white bg-danger">
+    <div class="card-body">
+      <p class="card-text">No activity to display, upload an image to get started!</p>
+    </div>
+  </div>
+<% else %>
+  <div class="container" id='events'>
+    <%= render @events %>
+  </div>
+
+  <%= will_paginate @events %>
+<% end %>

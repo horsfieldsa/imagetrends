@@ -60,6 +60,7 @@ service:
     DB_PORT: ${DatabaseEndpointPort}
     IMAGE_UPLOAD_BUCKET: ${ImageUploadBucket}
     RAILS_LOG_TO_STDOUT: "true"
+    REDIS_URL: "not_set"
 
   pipeline:
       source:

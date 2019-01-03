@@ -1,5 +1,9 @@
 <div class="d-none d-xl-block d-lg-block d-md-block">
     <ul class="nav top-nav nav-pills justify-content-center">
+        <li class="nav-item <%= 'active' if params[:controller] == 'events' && params[:action] == 'index' %>">
+            <a class="nav-link"
+            href="/activity"><i class="fa fa-feed" aria-hidden="true"></i> Activity</a>
+        </li>       
         <li class="nav-item <%= 'active' if params[:controller] == 'images' && params[:action] == 'index' && !request.query_string.present? %>">
             <a class="nav-link" href="/"><i class="fa fa-clock-o" aria-hidden="true"></i> Recent</a>
         </li>
@@ -7,7 +11,7 @@
         <li class="nav-item <%= 'active' if params[:controller] == 'images' && params[:action] == 'index' && request.query_string.present? %>">
             <%= link_to '<i class="fa fa-upload"></i> My Uploads'.html_safe, images_path(:view => "user"), :class => 'nav-link'%>
         </li>
-        <% end %>           
+        <% end %>                
         <li class="nav-item <%= 'active' if params[:controller] == 'tags' && params[:action] == 'index' %>">
             <a class="nav-link"
             href="/tags"><i class="fa fa-tags" aria-hidden="true"></i> Tags</a>
@@ -35,6 +39,9 @@
 
 <div class="d-xl-none d-lg-none d-md-none">
     <ul class="nav top-nav nav-pills justify-content-center hidden-sm-up">
+        <li class="nav-item <%= 'active' if params[:controller] == 'events' && params[:action] == 'index'%>">
+            <a class="nav-link" href="/activity"><i class="fa fa-feed" aria-hidden="true"></i></a>
+        </li>    
         <li class="nav-item <%= 'active' if params[:controller] == 'images' && params[:action] == 'index' && !request.query_string.present?%>">
             <a class="nav-link"
             href="/"><i class="fa fa-clock-o" aria-hidden="true"></i></a>

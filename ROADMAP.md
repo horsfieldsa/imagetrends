@@ -7,13 +7,11 @@
 * Activity Feed
 * Client-Side Click-Stream Recording
 * Real-time tag updating
-* Handling multiple image ratios gravefully
+* Handling multiple image ratios gracefully
 * Conversion of other image types to .jpg
 
 ## Enhancements
 
-* Distributed Deployment CloudFormation Template
-* Mu Deployment to ECS/FARGATE/EKS
 * AJAX Favoriting and Comment Updates (Comments to Action Cable Perhaps)
 * Remove blue high-light box on images
 * Seed example images during deployment

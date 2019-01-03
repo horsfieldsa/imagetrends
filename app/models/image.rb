@@ -1,12 +1,13 @@
 class Image < ApplicationRecord
 
   has_many :tags, dependent: :delete_all
+  has_many :events, dependent: :delete_all
   has_many :favorites, dependent: :delete_all
   has_many :comments, dependent: :delete_all
   has_one_attached :image_image
   belongs_to :user
 
-  after_create_commit :detect_labels, :log_create
+  after_create_commit :detect_labels, :log_create, :publish_event
   after_update_commit :log_update
   after_destroy_commit :log_destroy
 
@@ -23,6 +24,18 @@ class Image < ApplicationRecord
   end
 
   private
+
+  def publish_event
+
+    @event = Event.new do |e|
+        e.message = "#{self.user.username} uploaded a new image."
+        e.image_id = self.id
+        e.user_id = self.user.id
+    end
+
+    @event.save
+
+  end
 
   def log_create
     image_logger.info("Image created: User: #{self.user.username} Image: #{self.id} ")

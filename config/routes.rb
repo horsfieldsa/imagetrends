@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'events/index'
   devise_for :users, :controllers => {:registrations => "registrations", :sessions =>"sessions"}
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   resources :images
@@ -6,9 +7,12 @@ Rails.application.routes.draw do
   resources :favorites, except: [:new, :index, :show, :edit, :update]
   resources :comments, except: [:new, :index, :show, :edit, :update]
 
+  get 'activity', to: 'events#index'
   get 'uploaded', to: 'images#uploaded'
   get 'trends', to: 'trends#index'
   get '/images/tag/:name', to: 'images#find'
 
   root 'images#index'
+
+  mount ActionCable.server => '/cable'
 end

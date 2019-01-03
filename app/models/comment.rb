@@ -5,11 +5,23 @@ class Comment < ApplicationRecord
     validates :comment, presence: true
     validates_length_of :comment, :minimum => 10, :maximum => 500 
 
-    after_create_commit :detect_sentiment, :log_create
+    after_create_commit :detect_sentiment, :log_create, :publish_event
     after_update_commit :log_update
     after_destroy_commit :log_destroy
 
     private
+
+    def publish_event
+
+        @event = Event.new do |e|
+            e.message = "#{self.user.username} added a comment: #{self.comment}"
+            e.image_id = self.image.id
+            e.user_id = self.user.id
+        end
+
+        @event.save
+    
+    end
 
     def detect_sentiment
         DetectSentimentJob.perform_async(self.id)
