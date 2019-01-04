@@ -38,39 +38,6 @@ templates:
       ImageUploadBucket:
         Type: AWS::S3::Bucket
       
-      RedisClusterSecGroup:
-        Type: AWS::EC2::SecurityGroup
-        Properties:
-          VpcId:
-            Fn::ImportValue: mu-vpc-acceptance-VpcId
-          GroupDescription: Security Group for Imagetrends Redis Cluster
-          SecurityGroupIngress:
-          - IpProtocol: tcp
-            FromPort: '6379'
-            ToPort: '6379'
-            SourceSecurityGroupId:
-              Fn::ImportValue: mu-environment-acceptance-InstanceSecurityGroup
-
-      RedisClusterSubnetGroup:
-        Type: AWS::ElastiCache::SubnetGroup
-        Properties:
-          Description: Cache Subnet Group
-          SubnetIds: 
-            - Fn::ImportValue: mu-environment-acceptance-InstanceSubnetIds
-
-      RedisCluster:
-          Type: AWS::ElastiCache::CacheCluster
-          Properties:
-            AutoMinorVersionUpgrade: true
-            Engine: redis
-            CacheNodeType: cache.t2.micro
-            ClusterName : ImageTrends-A
-            NumCacheNodes: 1
-            CacheSubnetGroupName: !Ref RedisClusterSubnetGroup
-            VpcSecurityGroupIds:
-              - !GetAtt RedisClusterSecGroup.GroupId
-
-
 service:
   name: imagetrends-ui
   dockerfile: ./Dockerfile
