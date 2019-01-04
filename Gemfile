@@ -8,6 +8,7 @@ end
 
 group :production do
   gem 'mysql2'
+  gem 'redis', '~> 4.1.0'
 end
 
 gem 'bootsnap', '>= 1.1.0', require: false
