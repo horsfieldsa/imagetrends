@@ -19,7 +19,16 @@
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
       <div class="text-center">
-        <%= render event.image %>
+
+      <figure class="figure">
+        <a href="/images/<%= event.image.id %>">
+          <%= image_tag event.image.image_image.variant(resize: "600x400"), :class => "img-fluid img-thumbnail" %>
+        </a>
+        <figcaption class="figure-caption text-center">
+        </span>
+        </figcaption>
+      </figure>
+
       </div>
     </div>
   </div>
