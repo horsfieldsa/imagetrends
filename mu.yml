@@ -60,7 +60,7 @@ service:
     DB_PORT: ${DatabaseEndpointPort}
     IMAGE_UPLOAD_BUCKET: ${ImageUploadBucket}
     RAILS_LOG_TO_STDOUT: "true"
-    REDIS_URL: "redis://imagetrends.y7fmp4.ng.0001.usw2.cache.amazonaws.com:6379"
+    REDIS_URL: "redis://imagetrends-accept.y7fmp4.ng.0001.usw2.cache.amazonaws.com:6379"
 
   pipeline:
       source:
