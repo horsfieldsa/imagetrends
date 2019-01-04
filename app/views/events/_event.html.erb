@@ -15,6 +15,18 @@
     <p class="ml-5"><%= event.message %></p>
   </div>
 </div>
+<% if event.comment %>
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <div class="text-center">
+
+        <p class="font-italic">"<%= event.comment.comment%>"</p>
+
+      </div>
+    </div>
+  </div>
+<% end %>
+
 <% if event.image %>
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">

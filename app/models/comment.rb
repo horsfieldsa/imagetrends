@@ -14,9 +14,10 @@ class Comment < ApplicationRecord
     def publish_event
 
         @event = Event.new do |e|
-            e.message = "#{self.user.username} added a comment: #{self.comment}"
+            e.message = "#{self.user.username} added a comment."
             e.image_id = self.image.id
             e.user_id = self.user.id
+            e.comment_id = self.id
         end
 
         @event.save
