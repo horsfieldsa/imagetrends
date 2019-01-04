@@ -46,8 +46,8 @@ service:
   desiredCount: 2
   minSize: 1
   maxSize: 4
-  cpu: 256
-  memory: 2048
+  cpu: 512
+  memory: 4096
   pathPatterns:
   - /*
   environment:
