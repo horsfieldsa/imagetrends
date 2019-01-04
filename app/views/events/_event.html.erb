@@ -1,16 +1,27 @@
-<div class="row mb-4" id='event'>
-    <%= render event.image %>
-    <span>
-      <span class="fa-stack fa-lg">
-        <i class="fa fa-circle fa-stack-2x"></i>
-        <i class="fa fa-user fa-stack-1x fa-inverse"></i>
-      </span>
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+    <span class="fa-stack text-muted">
+      <i class="fa fa-circle fa-stack-2x"></i>
+      <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+    </span>             
       <%= event.user.username %>
-      <div class="text-muted">
-        <%= event.created_at.to_formatted_s(:short) %>
-      </div>
-      <div class="my-auto text-dark">
-        <%= event.message %>
-      </div>
-    </span>
+        <span class="badge badge-secondary pull-right">
+            <%= event.created_at.to_formatted_s(:short) %>
+        </span>      
+  </div>
 </div>
+<div class="row">
+  <div class="col-xs-10 col-sm-10 col-md-10 col-lg-11 col-xl-11 text-black-50">
+    <p class="ml-5"><%= event.message %></p>
+  </div>
+</div>
+<% if event.image %>
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <div class="text-center">
+        <%= render event.image %>
+      </div>
+    </div>
+  </div>
+<% end %>
+<hr/>

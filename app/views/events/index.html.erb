@@ -7,7 +7,13 @@
   </div>
 <% else %>
   <div class="container" id='events'>
-    <%= render @events %>
+
+  <div class="row">
+    <div class="col-12">
+      <%= render @events %>
+    </div>
+  </div>
+
   </div>
 
   <%= will_paginate @events %>
