@@ -15,12 +15,12 @@
     <p class="ml-5"><%= event.message %></p>
   </div>
 </div>
-<% if event.comment %>
+<% if event.comment_id %>
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
       <div class="text-center">
 
-        <p class="font-italic">"<%= event.comment.comment%>"</p>
+        <p class="font-italic">"<%= Comment.find(event.comment_id).comment %>"</p>
 
       </div>
     </div>
