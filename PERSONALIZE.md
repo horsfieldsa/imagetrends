@@ -1,0 +1,47 @@
+# Personzalize Recommendations
+
+## User Data
+
+```bash
+
+```
+
+## Item Data
+
+```bash
+
+```
+
+## User-Item Interaction
+
+```bash
+
+{
+  "type": "record",
+  "name": "Interactions",
+  "namespace": "com.amazonaws.personalize.schema",
+  "fields": [
+    {
+      "name": "USER_ID",
+      "type": "string"
+    },
+    {
+      "name": "ITEM_ID",
+      "type": "string"
+    },
+    { "name": "EVENT_TYPE",
+      "type": "string"
+    },
+    {
+      "name": "EVENT_VALUE",
+      "type": "string"
+    },
+    {
+      "name": "TIMESTAMP",
+      "type": "long"
+    }
+  ],
+  "version": "1.0"
+}
+
+```

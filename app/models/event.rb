@@ -5,5 +5,8 @@ class Event < ApplicationRecord
     after_create_commit { EventBroadcastJob.perform_async(self) }
 
     # Pagination Items Per Page
-    self.per_page = 20
+    self.per_page = 10
+
+    private
+    
 end
