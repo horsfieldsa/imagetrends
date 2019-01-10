@@ -2,11 +2,25 @@ class Favorite < ApplicationRecord
     belongs_to :user
     belongs_to :image
 
-    after_create_commit :log_create, :publish_event
+    after_create_commit :log_create, :publish_event, :record_event
     after_update_commit :log_update
     after_destroy_commit :log_destroy
 
     private
+
+    # Record Event For Perosnalize
+    def record_event
+        event = {
+            type: 'useritem',
+            ITEM_ID: self.image.id,
+            USER_ID: self.user.id,
+            EVENT_TYPE: 'like',
+            EVENT_VALUE: self.id,
+            TIMESTAMP: Time.now.to_i
+        }
+
+        EventRecordJob.perform_async(event)
+    end
 
     def publish_event
 
