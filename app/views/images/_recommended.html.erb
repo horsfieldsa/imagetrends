@@ -1,0 +1,7 @@
+<% if user_signed_in? %>
+    <h5>Recommended Images</h5>
+    <div class="row text-center text-lg-left" id='images'>
+        <%= render @recommended %>
+    </div>
+    <hr/>
+<% end %>

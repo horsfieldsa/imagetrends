@@ -24,6 +24,7 @@ class ImagesController < ApplicationController
       end
     else
       image_logger.info("Loading all images for User: #{!current_user.nil? ? current_user.username : 'No User'} Page: #{!params[:page].nil? ? params[:page] : '1'}")
+      @recommended = Image.where(user: current_user).limit(4)
       @images = Image.order(created_at: :desc).paginate(page: params[:page])
       respond_to do |format|
       format.html

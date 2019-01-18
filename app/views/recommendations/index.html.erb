@@ -1,5 +1,5 @@
 <a href="javascript:" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
-<% if @images.count == 0 %>
+<% if @recommended.count == 0 %>
   <div class="card text-white bg-danger">
     <div class="card-body">
       <p class="card-text">No images to display, upload an image to get started!</p>
@@ -7,13 +7,9 @@
   </div>
 <% else %>
 
-  <% if @recommended %>
-    <%= render 'recommended' %>
-  <% end %>
-
+  <h5>Recommended Images</h6>
   <div class="row text-center text-lg-left" id='images'>  
-    <%= render @images %>
+    <%= render @recommended %>
   </div>
 
-  <%= will_paginate @images %>
 <% end %>

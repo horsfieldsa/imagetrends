@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   devise_for :users, :controllers => {:registrations => "registrations", :sessions =>"sessions"}
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   resources :images
+  resources :recommendations
   resources :tags
   resources :favorites, except: [:new, :index, :show, :edit, :update]
   resources :comments, except: [:new, :index, :show, :edit, :update]
