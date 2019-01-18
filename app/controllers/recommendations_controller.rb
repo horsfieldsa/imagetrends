@@ -5,6 +5,16 @@ class RecommendationsController < ApplicationController
     @recommended = get_recommendations(current_user.id)
   end
 
+  def user_recommendations
+    @recommended = get_recommendations(current_user.id)
+    render partial: "recommended"
+  end
+
+  def useritem_recommendations
+    @recommended = get_recommendations(current_user.id)
+    render partial: "recommended"
+  end
+
   private
 
   def get_recommendations(user_id)
@@ -28,7 +38,9 @@ class RecommendationsController < ApplicationController
     recommendations_logger.info("Recommendations: #{recommendations}")
 
     recommendations.first(4).each do |recommendation|
-      collection <<  Image.find(recommendation['itemId'])
+      suppress(Exception) do
+        collection <<  Image.find(recommendation['itemId'])
+      end
     end
 
     recommendations_logger.info("Recommendations Collection: #{collection}")

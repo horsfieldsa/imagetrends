@@ -1,0 +1,16 @@
+<a href="javascript:" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
+<% if @recommended.count == 0 %>
+  <div class="card text-white bg-danger">
+    <div class="card-body">
+      <p class="card-text">No recommended images to display.</p>
+    </div>
+  </div>
+<% else %>
+
+  <h5>Recommended Images</h6>
+  <div class="row text-center text-lg-left" id='images'>  
+    <%= render @recommended %>
+  </div>
+  <hr/>
+
+<% end %>

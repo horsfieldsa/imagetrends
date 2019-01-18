@@ -34,6 +34,7 @@ gem 'cancancan', '~> 2.0'
 gem 'exifr'
 gem 'oj', platform: :mri
 gem 'aws-xray-sdk', require: ['aws-xray-sdk/facets/rails/railtie']
+gem 'render_async'
 
 group :development, :test do
   gem 'byebug', platform: :mri

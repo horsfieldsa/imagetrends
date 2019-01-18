@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   get 'trends', to: 'trends#index'
   get '/images/tag/:name', to: 'images#find'
 
+  get :user_recommendations, controller: :recommendations
+
   root 'images#index'
 
   mount ActionCable.server => '/cable'

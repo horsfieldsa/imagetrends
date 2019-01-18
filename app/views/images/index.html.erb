@@ -7,8 +7,10 @@
   </div>
 <% else %>
 
-  <% if @recommended %>
-    <%= render 'recommended' %>
+  <% if user_signed_in? %>
+    <%= render_async user_recommendations_path do %>
+      <i class='fa fa-spinner fa-spin'></i> Loading Recommendations ...
+    <% end %>
   <% end %>
 
   <div class="row text-center text-lg-left" id='images'>  
