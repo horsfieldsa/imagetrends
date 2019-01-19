@@ -20,5 +20,10 @@ module RailsWebApp
 
     # Init SuckerPunch for Background Jobs
     config.active_job.queue_adapter = :sucker_punch
+
+    RenderAsync.configure do |config|
+      config.turbolinks = true # Enable this option if you are using Turbolinks 5+
+    end
+    
   end
 end
