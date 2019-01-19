@@ -42,7 +42,9 @@ class ImagesController < ApplicationController
         USER_ID: current_user.id,
         EVENT_TYPE: 'click',
         EVENT_VALUE: @image.id,
-        TIMESTAMP: Time.now.to_i
+        TIMESTAMP: Time.now.to_i,
+        SESSION_ID: session.id,
+        EVENT_ID: SecureRandom.hex(10)
       }
 
       EventRecordJob.perform_async(event)

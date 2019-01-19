@@ -8,7 +8,7 @@ class Favorite < ApplicationRecord
 
     private
 
-    # Record Event For Perosnalize
+    # Record Event For Personalize
     def record_event
         event = {
             type: 'useritem',
