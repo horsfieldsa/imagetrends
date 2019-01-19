@@ -11,7 +11,7 @@ class RecommendationsController < ApplicationController
   end
 
   def useritem_recommendations
-    @recommended = get_user_recommendations(current_user.id, "1")
+    @recommended = get_useritem_recommendations(current_user.id, "1")
     render partial: "recommended"
   end
 

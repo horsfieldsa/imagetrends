@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get '/images/tag/:name', to: 'images#find'
 
   get :user_recommendations, controller: :recommendations
+  get :useritem_recommendations, controller: :recommendations
 
   root 'images#index'
 
