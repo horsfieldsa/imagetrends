@@ -10,13 +10,17 @@ class Favorite < ApplicationRecord
 
     # Record Event For Personalize
     def record_event
+
+        @category = Tag.where(image_id: self.image.id).where("confidence > ?", 95.0).first!
+
         event = {
             type: 'useritem',
             ITEM_ID: self.image.id,
             USER_ID: self.user.id,
             EVENT_TYPE: 'like',
             EVENT_VALUE: self.id,
-            TIMESTAMP: Time.now.to_i
+            TIMESTAMP: Time.now.to_i,
+            CATEGORY: @category ? @category.name : 'None'
         }
 
         EventRecordJob.perform_async(event)

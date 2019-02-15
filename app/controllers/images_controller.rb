@@ -36,6 +36,8 @@ class ImagesController < ApplicationController
 
     if current_user
 
+      @category = Tag.where(image_id: @image.id).where("confidence > ?", 98.0).first
+
       event = {
         type: 'useritem',
         ITEM_ID: @image.id,
@@ -44,7 +46,8 @@ class ImagesController < ApplicationController
         EVENT_VALUE: @image.id,
         TIMESTAMP: Time.now.to_i,
         SESSION_ID: session.id,
-        EVENT_ID: SecureRandom.hex(10)
+        EVENT_ID: SecureRandom.hex(10),
+        CATEGORY: @category ? @category.name : 'None'
       }
 
       EventRecordJob.perform_async(event)

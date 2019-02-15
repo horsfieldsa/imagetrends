@@ -7,7 +7,7 @@ class Image < ApplicationRecord
   has_one_attached :image_image
   belongs_to :user
 
-  after_create_commit :detect_labels, :log_create, :publish_event, :record_event
+  after_create_commit :detect_labels, :log_create, :publish_event
   after_update_commit :log_update
   after_destroy_commit :log_destroy
 
@@ -24,16 +24,6 @@ class Image < ApplicationRecord
   end
 
   private
-
-  # Record Event For Perosnalize
-  def record_event
-    event = {
-      type: 'item',
-      ITEM_ID: self.id
-    }
-
-    EventRecordJob.perform_async(event)
-  end
 
   def publish_event
 
