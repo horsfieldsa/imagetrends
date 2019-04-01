@@ -60,9 +60,9 @@ service:
     DB_PORT: ${DatabaseEndpointPort}
     IMAGE_UPLOAD_BUCKET: ${ImageUploadBucket}
     RAILS_LOG_TO_STDOUT: "true"
-    REDIS_URL: "redis://imagetrends-accept.y7fmp4.ng.0001.usw2.cache.amazonaws.com:6379"
-    EVENT_RECORD_API: "https://58kjhubsd1.execute-api.us-west-2.amazonaws.com/Prod/event/"
-    RECOMMEND_API: "https://1825y1ya2i.execute-api.us-west-2.amazonaws.com/Prod/recommendation"
+    REDIS_URL: "redis://imagetrends-accept.y7fmp4.ng.0001.usw2.cache.amazonaws.com:6379"          # Activity Feed
+    EVENT_RECORD_API: "https://58kjhubsd1.execute-api.us-west-2.amazonaws.com/Prod/event/"        # Event Recording for Personalize
+    RECOMMEND_API: "https://1825y1ya2i.execute-api.us-west-2.amazonaws.com/Prod/recommendation"   # Recomemendations for Personalize
 
   pipeline:
       source:

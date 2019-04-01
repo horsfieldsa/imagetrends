@@ -5,25 +5,11 @@ class Comment < ApplicationRecord
     validates :comment, presence: true
     validates_length_of :comment, :minimum => 10, :maximum => 500 
 
-    after_create_commit :detect_sentiment, :log_create, :publish_event, :record_event
+    after_create_commit :detect_sentiment, :log_create, :publish_event
     after_update_commit :log_update
     after_destroy_commit :log_destroy
 
-    private
-
-    # Record Event For Perosnalize
-    def record_event
-        event = {
-            type: 'useritem',
-            ITEM_ID: self.image.id,
-            USER_ID: self.user.id,
-            EVENT_TYPE: 'comment',
-            EVENT_VALUE: self.id,
-            TIMESTAMP: Time.now.to_i
-        }
-
-        EventRecordJob.perform_async(event)
-    end    
+    private  
 
     def publish_event
 

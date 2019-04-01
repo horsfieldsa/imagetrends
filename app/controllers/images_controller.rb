@@ -38,20 +38,6 @@ class ImagesController < ApplicationController
 
       @category = Tag.where(image_id: @image.id).where("confidence > ?", 98.0).first
 
-      event = {
-        type: 'useritem',
-        ITEM_ID: @image.id,
-        USER_ID: current_user.id,
-        EVENT_TYPE: 'click',
-        EVENT_VALUE: @image.id,
-        TIMESTAMP: Time.now.to_i,
-        SESSION_ID: session.id,
-        EVENT_ID: SecureRandom.hex(10),
-        CATEGORY: @category ? @category.name : 'None'
-      }
-
-      EventRecordJob.perform_async(event)
-
       if Favorite.where("user_id = ? AND image_id = ?", current_user.id, @image.id).count > 0
         @favorited = true
         @favorite = Favorite.find_by_user_id_and_image_id(current_user.id, @image.id)
